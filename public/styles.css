@@ -110,14 +110,14 @@ body::after {
   box-shadow: 0 10px 24px -14px rgba(0, 0, 0, 0.3);
 }
 
-/* Sayfa filigranı — içeriğin arkasında yumuşak logo */
+/* Sayfa filigranı — sağda, dikey olarak ortalı */
 .page-watermark {
   position: fixed;
-  left: 50%;
-  bottom: 8%;
-  transform: translateX(-50%);
-  width: 520px;
-  max-width: 70vw;
+  right: 3%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 420px;
+  max-width: 32vw;
   pointer-events: none;
   z-index: 0;
   opacity: 0.08;
@@ -830,7 +830,16 @@ dl.answers dd {
   .site-header .subtitle { font-size: 14px; }
   .site-header .hero-badge { font-size: 11px; padding: 5px 11px; }
   .brand-logo-sm { max-width: 150px; padding: 10px 14px; }
-  .page-watermark { width: 320px; max-width: 80vw; opacity: 0.07; bottom: 12%; }
+  /* Mobilde sağda yer kalmaz — filigranı alta al ve küçült */
+  .page-watermark {
+    right: 50%;
+    top: auto;
+    bottom: 8%;
+    transform: translateX(50%);
+    width: 260px;
+    max-width: 70vw;
+    opacity: 0.06;
+  }
   .site-header .deco-atom { width: 140px; height: 140px; top: -20px; left: -40px; }
   .site-header .deco-dna { width: 44px; height: 88px; right: 10px; }
   .site-header .deco-rad { width: 120px; height: 120px; bottom: -30px; right: -30px; }
