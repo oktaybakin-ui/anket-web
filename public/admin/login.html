@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Giris - TReTREAT</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <h1>Admin Giris</h1>
+        <p class="subtitle">TReTREAT yonetim paneli</p>
+      </div>
+    </header>
+    <main class="container" style="max-width: 420px">
+      <form id="loginForm" class="card">
+        <label>
+          Kullanici adi
+          <input type="text" name="username" autocomplete="username" required />
+        </label>
+        <label style="margin-top: 12px">
+          Sifre
+          <input type="password" name="password" autocomplete="current-password" required />
+        </label>
+        <div id="loginMsg" class="message" role="alert"></div>
+        <div class="form-actions">
+          <button class="btn btn-primary" type="submit">Giris Yap</button>
+        </div>
+      </form>
+    </main>
+    <script>
+      document.getElementById("loginForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const fd = new FormData(e.currentTarget);
+        const res = await fetch("/admin/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            username: fd.get("username"),
+            password: fd.get("password")
+          })
+        });
+        const msg = document.getElementById("loginMsg");
+        if (res.ok) {
+          window.location.href = "/admin/index.html";
+        } else {
+          const data = await res.json().catch(() => ({}));
+          msg.className = "message error";
+          msg.textContent = data.error || "Giris basarisiz.";
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TReTREAT - Re-irradiation Workflow Anketi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <h1>TReTREAT</h1>
+        <p class="subtitle">Turkish Re-irradiation Workflow Survey</p>
+      </div>
+    </header>
+
+    <main class="container">
+      <section id="step-identity" class="card">
+        <div class="step-indicator">
+          <span class="dot active"></span>
+          <span class="dot"></span>
+        </div>
+        <h2 class="step-title">Kişisel Bilgiler</h2>
+        <p class="step-lead">
+          Ankete başlamadan önce lütfen <strong>ad</strong>, <strong>soyad</strong> ve
+          <strong>TC Kimlik No</strong> bilgilerinizi giriniz. Her TC ile yalnızca bir kez
+          anket doldurulabilir.
+        </p>
+
+        <form id="identityForm" novalidate>
+          <div class="row">
+            <label>
+              Ad <span class="req">*</span>
+              <input type="text" name="ad" required minlength="2" autocomplete="given-name" />
+            </label>
+            <label>
+              Soyad <span class="req">*</span>
+              <input type="text" name="soyad" required minlength="2" autocomplete="family-name" />
+            </label>
+            <label>
+              TC Kimlik No <span class="req">*</span>
+              <input
+                type="text"
+                name="tc"
+                required
+                inputmode="numeric"
+                maxlength="11"
+                pattern="\d{11}"
+                autocomplete="off"
+              />
+            </label>
+          </div>
+          <div id="identityMessage" class="message" role="alert" aria-live="polite"></div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+              Ankete Başla
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section id="step-survey" class="hidden">
+        <div class="card">
+          <div class="step-indicator">
+            <span class="dot done"></span>
+            <span class="dot active"></span>
+          </div>
+          <h2 class="step-title">Anket Soruları</h2>
+          <p class="step-lead">
+            Hoş geldiniz, <strong id="greetingName">—</strong>. Lütfen aşağıdaki soruları yanıtlayınız.
+          </p>
+        </div>
+
+        <form id="surveyForm" class="card" novalidate>
+          <div id="questionsContainer"></div>
+          <div id="formMessage" class="message" role="alert" aria-live="polite"></div>
+          <div class="form-actions" style="justify-content: space-between">
+            <button type="button" id="backBtn" class="btn btn-secondary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+              Geri
+            </button>
+            <button type="submit" id="submitBtn" class="btn btn-primary">Anketi Gönder</button>
+          </div>
+        </form>
+      </section>
+
+      <section id="thankyou" class="card hidden">
+        <h2>Teşekkür ederiz!</h2>
+        <p>Anket yanıtlarınız başarıyla kaydedildi.</p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <a href="/admin/login.html">Admin Giriş</a>
+      </div>
+    </footer>
+
+    <script src="/survey.js"></script>
+  </body>
+</html>

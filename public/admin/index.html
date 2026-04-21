@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Panel - TReTREAT</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="admin-topbar">
+      <h1>TReTREAT - Admin Panel</h1>
+      <div class="admin-actions">
+        <span id="countBadge" class="message" style="margin-right:8px"></span>
+        <input
+          id="searchInput"
+          type="text"
+          placeholder="Ara: ad, soyad veya TC"
+          style="padding:8px 10px;border:1px solid var(--border);border-radius:6px;min-width:220px"
+        />
+        <a class="btn btn-primary btn-sm" href="/admin/api/export/all">Tumunu Excel'e Aktar</a>
+        <button id="logoutBtn" class="btn btn-secondary btn-sm">Cikis</button>
+      </div>
+    </div>
+
+    <main style="padding: 0 16px 40px">
+      <div class="table-wrap">
+        <table id="responsesTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Ad</th>
+              <th>Soyad</th>
+              <th>TC</th>
+              <th>Tarih</th>
+              <th style="width: 240px">Islemler</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </main>
+
+    <div id="modalRoot"></div>
+
+    <script src="/admin/admin.js"></script>
+  </body>
+</html>

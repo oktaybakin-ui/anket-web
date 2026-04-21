@@ -1,0 +1,21 @@
+{
+  "name": "anket-web",
+  "version": "1.0.0",
+  "description": "TC Kimlik No ile anket uygulamasi (Vercel + Supabase)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.4.5",
+    "exceljs": "^4.4.0",
+    "express": "^4.21.1",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

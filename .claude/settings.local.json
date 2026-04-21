@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pandoc \"re-irratiation- Klinik Workflow-anket-REV1.docx\" -t markdown)",
+      "Bash(SKILL_DIR=\"/Users/handekayacik/Library/Application Support/Claude/local-agent-mode-sessions/skills-plugin/3cbc598c-036d-4ce4-8518-9a761c3e263c/ed86731d-1568-47d7-9e75-0581d49e411b/skills/docx\")",
+      "Bash(python3 \"$SKILL_DIR/scripts/office/unpack.py\" \"/Users/handekayacik/Desktop/anket web/re-irratiation- Klinik Workflow-anket-REV1.docx\" \"/tmp/anket_unpacked\")",
+      "Bash(npm install:*)",
+      "Bash(open https://github.com/new)",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "mcp__Claude_in_Chrome__navigate",
+      "mcp__Claude_in_Chrome__read_page",
+      "Bash(open -a \"Google Chrome\" https://github.com/new)",
+      "mcp__Claude_in_Chrome__computer"
+    ]
+  }
+}
