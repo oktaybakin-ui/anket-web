@@ -110,18 +110,24 @@ body::after {
   box-shadow: 0 10px 24px -14px rgba(0, 0, 0, 0.3);
 }
 
-/* Sayfa filigranı — sağda, dikey olarak ortalı */
+/* Sayfa filigranları — her iki kenarda, dikey ortalı */
 .page-watermark {
   position: fixed;
-  right: 3%;
   top: 50%;
-  transform: translateY(-50%);
   width: 420px;
-  max-width: 32vw;
+  max-width: 26vw;
   pointer-events: none;
   z-index: 0;
   opacity: 0.08;
   filter: saturate(0.6);
+}
+.page-watermark-right {
+  right: 0;
+  transform: translate(12%, -50%);
+}
+.page-watermark-left {
+  left: 0;
+  transform: translate(-12%, -50%);
 }
 .page-watermark img {
   width: 100%;
@@ -830,8 +836,10 @@ dl.answers dd {
   .site-header .subtitle { font-size: 14px; }
   .site-header .hero-badge { font-size: 11px; padding: 5px 11px; }
   .brand-logo-sm { max-width: 150px; padding: 10px 14px; }
-  /* Mobilde sağda yer kalmaz — filigranı alta al ve küçült */
-  .page-watermark {
+  /* Mobilde kenarlarda yer kalmaz — sadece sağdaki filigranı alta al,
+     soldakini gizle */
+  .page-watermark-left { display: none; }
+  .page-watermark-right {
     right: 50%;
     top: auto;
     bottom: 8%;
