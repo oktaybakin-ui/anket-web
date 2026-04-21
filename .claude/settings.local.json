@@ -46,7 +46,8 @@
       "Bash(sips -z 16 16 \"Gemini_Generated_Image_dr8e95dr8e95dr8e.png\" --out \"public/assets/favicon-16.png\")",
       "Bash(sips -z 180 180 \"Gemini_Generated_Image_dr8e95dr8e95dr8e.png\" --out \"public/assets/apple-touch-icon.png\")",
       "Bash(rm -f \"Gemini_Generated_Image_dr8e95dr8e95dr8e.png\")",
-      "Bash(echo \"Gemini_Generated_*.png\")"
+      "Bash(echo \"Gemini_Generated_*.png\")",
+      "Bash(curl -sSL https://anket-web.vercel.app/)"
     ]
   }
 }
