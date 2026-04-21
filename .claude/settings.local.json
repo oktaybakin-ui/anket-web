@@ -39,7 +39,14 @@
       "Bash(node -e ' *)",
       "Bash(node -c server.js)",
       "Bash(node -c db.js)",
-      "Bash(node -c utils/tc.js)"
+      "Bash(node -c utils/tc.js)",
+      "Bash(sips -Z 480 \"public/assets/tretreat-logo.png\" --out \"public/assets/tretreat-logo.png\")",
+      "Bash(sips -z 192 192 \"Gemini_Generated_Image_dr8e95dr8e95dr8e.png\" --out \"public/assets/favicon-192.png\")",
+      "Bash(sips -z 32 32 \"Gemini_Generated_Image_dr8e95dr8e95dr8e.png\" --out \"public/assets/favicon-32.png\")",
+      "Bash(sips -z 16 16 \"Gemini_Generated_Image_dr8e95dr8e95dr8e.png\" --out \"public/assets/favicon-16.png\")",
+      "Bash(sips -z 180 180 \"Gemini_Generated_Image_dr8e95dr8e95dr8e.png\" --out \"public/assets/apple-touch-icon.png\")",
+      "Bash(rm -f \"Gemini_Generated_Image_dr8e95dr8e95dr8e.png\")",
+      "Bash(echo \"Gemini_Generated_*.png\")"
     ]
   }
 }
