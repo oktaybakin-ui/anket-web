@@ -595,3 +595,64 @@ dl.answers dd {
   background-clip: padding-box;
 }
 ::-webkit-scrollbar-thumb:hover { background: rgba(15, 23, 42, 0.28); background-clip: padding-box; }
+
+/* ===== Mobile ===== */
+@media (max-width: 640px) {
+  .container { padding: 0 14px; }
+  .site-header { padding: 28px 0 22px; margin-bottom: 18px; }
+  .site-header h1 { font-size: 26px; }
+  .site-header .subtitle { font-size: 14px; }
+
+  .card { padding: 20px 18px; border-radius: 16px; margin-bottom: 16px; }
+  .step-title { font-size: 19px; }
+  .step-lead { font-size: 14px; }
+
+  .info-box { padding: 16px 16px; font-size: 14px; }
+
+  .question { padding: 16px 0; }
+  .question .qtext { font-size: 14.5px; }
+  .options { grid-template-columns: 1fr; gap: 8px; }
+  .options label { padding: 11px 12px; font-size: 14px; }
+
+  .btn { width: 100%; justify-content: center; padding: 13px 18px; }
+  .btn-sm { width: auto; padding: 8px 12px; }
+  .form-actions { flex-direction: column; gap: 10px; }
+  .form-actions[style*="space-between"] { flex-direction: column-reverse; }
+
+  input[type="text"], input[type="password"], textarea {
+    font-size: 16px; /* iOS zoom'u engeller */
+  }
+
+  /* Admin */
+  .admin-topbar {
+    padding: 14px 16px;
+    gap: 10px;
+    position: static;
+  }
+  .admin-topbar h1 { font-size: 17px; width: 100%; }
+  .admin-actions { width: 100%; flex-direction: column; align-items: stretch; }
+  #searchInput { min-width: 0; width: 100%; }
+  .admin-actions .btn { width: 100%; }
+
+  .table-wrap {
+    margin: 0 12px;
+    border-radius: 14px;
+    overflow-x: auto;
+  }
+  table { min-width: 640px; font-size: 13px; }
+  th, td { padding: 10px 12px; }
+
+  /* Modal */
+  .modal { padding: 22px 18px; width: 94%; }
+  .modal h2 { font-size: 19px; }
+  dl.answers dt { font-size: 12px; }
+  dl.answers dd { padding: 8px 10px; font-size: 14px; }
+  #thankyou { padding: 40px 20px; }
+  #thankyou h2 { font-size: 24px; }
+}
+
+@media (max-width: 420px) {
+  .site-header h1 { font-size: 23px; }
+  .card { padding: 18px 14px; }
+  .info-box { padding: 14px 14px; }
+}
