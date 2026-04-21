@@ -2,25 +2,118 @@ require("dotenv").config();
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
+const crypto = require("crypto");
 const path = require("path");
 const ExcelJS = require("exceljs");
 
 const db = require("./db");
 const questions = require("./questions");
-const { validateTC } = require("./utils/tc");
+const { validateTC, hashTC, maskTC } = require("./utils/tc");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || "admin";
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "degistir123";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || null;
+const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH || null;
 const JWT_SECRET = process.env.JWT_SECRET || "lutfen-env-dosyasini-doldur";
 const COOKIE_NAME = "admin_token";
+const CSRF_COOKIE = "csrf_token";
 const COOKIE_MAX_AGE = 1000 * 60 * 60 * 8; // 8 saat
+const IS_PROD = process.env.NODE_ENV === "production";
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Vercel arkasında olduğumuz için req.ip'yi X-Forwarded-For üzerinden almak gerekli
+app.set("trust proxy", 1);
+
+// --- Security headers ---
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      useDefaults: true,
+      directives: {
+        "default-src": ["'self'"],
+        "script-src": ["'self'"],
+        "style-src": ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+        "font-src": ["'self'", "https://fonts.gstatic.com"],
+        "img-src": ["'self'", "data:", "https://medikalfizik.org"],
+        "connect-src": ["'self'"],
+        "frame-ancestors": ["'none'"],
+        "object-src": ["'none'"],
+        "base-uri": ["'self'"]
+      }
+    },
+    crossOriginEmbedderPolicy: false,
+    referrerPolicy: { policy: "strict-origin-when-cross-origin" }
+  })
+);
+
+app.use(express.json({ limit: "100kb" }));
+app.use(express.urlencoded({ extended: true, limit: "100kb" }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+
+// --- CSRF token middleware (double-submit cookie) ---
+function ensureCsrfCookie(req, res, next) {
+  if (!req.cookies[CSRF_COOKIE]) {
+    const token = crypto.randomBytes(24).toString("hex");
+    res.cookie(CSRF_COOKIE, token, {
+      sameSite: "lax",
+      secure: IS_PROD,
+      maxAge: COOKIE_MAX_AGE
+      // httpOnly KAPALI — admin.js okuyup header'da geri göndermeli
+    });
+    req.cookies[CSRF_COOKIE] = token;
+  }
+  next();
+}
+
+function requireCsrf(req, res, next) {
+  const cookieToken = req.cookies[CSRF_COOKIE];
+  const headerToken = req.headers["x-csrf-token"];
+  if (!cookieToken || !headerToken || cookieToken !== headerToken) {
+    return res.status(403).json({ error: "CSRF doğrulaması başarısız." });
+  }
+  next();
+}
+
+// --- Rate limiters ---
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Çok fazla başarısız deneme. 15 dakika sonra tekrar deneyin." }
+});
+
+const submitLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Çok fazla istek. Bir saat sonra tekrar deneyin." }
+});
+
+const adminApiLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 60,
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+// Static files
+app.use(express.static(path.join(__dirname, "public"), { index: false }));
+
+// CSRF cookie HTML istekleri için her zaman set edilsin
+app.get("/", ensureCsrfCookie, (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+app.get("/admin/login.html", ensureCsrfCookie, (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "admin", "login.html"));
+});
+app.get("/admin/index.html", ensureCsrfCookie, (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "admin", "index.html"));
+});
 
 // --- Public API ---
 
@@ -28,14 +121,14 @@ app.get("/api/questions", (req, res) => {
   res.json(questions);
 });
 
-app.post("/api/submit", async (req, res) => {
+app.post("/api/submit", submitLimiter, ensureCsrfCookie, requireCsrf, async (req, res) => {
   try {
     const { ad, soyad, tc, answers } = req.body || {};
     if (!ad || !soyad || !tc) {
       return res.status(400).json({ error: "Ad, soyad ve TC zorunludur." });
     }
-    const adClean = String(ad).trim();
-    const soyadClean = String(soyad).trim();
+    const adClean = String(ad).trim().slice(0, 60);
+    const soyadClean = String(soyad).trim().slice(0, 60);
     const tcClean = String(tc).trim();
 
     if (adClean.length < 2 || soyadClean.length < 2) {
@@ -45,7 +138,10 @@ app.post("/api/submit", async (req, res) => {
       return res.status(400).json({ error: "Geçersiz TC Kimlik No." });
     }
 
-    const existing = await db.findByTC(tcClean);
+    const tcHash = hashTC(tcClean);
+    const tcMasked = maskTC(tcClean);
+
+    const existing = await db.findByTCHash(tcHash);
     if (existing) {
       return res.status(409).json({ error: "Bu TC ile daha önce anket doldurulmuş." });
     }
@@ -58,10 +154,10 @@ app.post("/api/submit", async (req, res) => {
         const otherText = answersObj[q.id + "__other"];
         if (Array.isArray(v)) {
           v = v.map((x) =>
-            x === "Diğer" && otherText ? `Diğer: ${String(otherText).trim()}` : x
+            x === "Diğer" && otherText ? `Diğer: ${String(otherText).trim().slice(0, 500)}` : x
           );
         } else if (v === "Diğer" && otherText) {
-          v = `Diğer: ${String(otherText).trim()}`;
+          v = `Diğer: ${String(otherText).trim().slice(0, 500)}`;
         }
       }
       if (q.required) {
@@ -80,12 +176,13 @@ app.post("/api/submit", async (req, res) => {
     const inserted = await db.insertResponse({
       ad: adClean,
       soyad: soyadClean,
-      tc: tcClean,
+      tcHash,
+      tcMasked,
       answers: normalized
     });
     res.json({ ok: true, id: inserted.id });
   } catch (err) {
-    console.error(err);
+    console.error("[submit]", err && err.message ? err.message : err);
     res.status(500).json({ error: "Sunucu hatası." });
   }
 });
@@ -94,6 +191,25 @@ app.post("/api/submit", async (req, res) => {
 
 function signToken() {
   return jwt.sign({ admin: true }, JWT_SECRET, { expiresIn: "8h" });
+}
+
+function verifyPassword(input) {
+  if (typeof input !== "string" || !input) return false;
+  if (ADMIN_PASSWORD_HASH) {
+    try {
+      return bcrypt.compareSync(input, ADMIN_PASSWORD_HASH);
+    } catch {
+      return false;
+    }
+  }
+  if (ADMIN_PASSWORD) {
+    // Timing-safe plain karşılaştırma (geçici geri uyumluluk)
+    const a = Buffer.from(input);
+    const b = Buffer.from(ADMIN_PASSWORD);
+    if (a.length !== b.length) return false;
+    return crypto.timingSafeEqual(a, b);
+  }
+  return false;
 }
 
 function requireAdmin(req, res, next) {
@@ -115,14 +231,16 @@ function unauthorized(req, res) {
   return res.redirect("/admin/login.html");
 }
 
-app.post("/admin/login", (req, res) => {
+app.post("/admin/login", loginLimiter, ensureCsrfCookie, requireCsrf, (req, res) => {
   const { username, password } = req.body || {};
-  if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+  const userOk = typeof username === "string" && username === ADMIN_USERNAME;
+  const passOk = verifyPassword(password);
+  if (userOk && passOk) {
     const token = signToken();
     res.cookie(COOKIE_NAME, token, {
       httpOnly: true,
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      secure: IS_PROD,
       maxAge: COOKIE_MAX_AGE
     });
     return res.json({ ok: true });
@@ -130,31 +248,33 @@ app.post("/admin/login", (req, res) => {
   res.status(401).json({ error: "Hatalı kullanıcı adı veya şifre." });
 });
 
-app.post("/admin/logout", (req, res) => {
+app.post("/admin/logout", ensureCsrfCookie, requireCsrf, (req, res) => {
   res.clearCookie(COOKIE_NAME);
   res.json({ ok: true });
 });
 
 // --- Admin API ---
 
+app.use("/admin/api", adminApiLimiter);
+
 app.get("/admin/api/responses", requireAdmin, async (req, res) => {
   try {
     const rows = await db.listResponses();
     res.json({ questions, responses: rows });
   } catch (err) {
-    console.error(err);
+    console.error("[responses]", err && err.message ? err.message : err);
     res.status(500).json({ error: "Liste alınamadı." });
   }
 });
 
-app.delete("/admin/api/responses/:id", requireAdmin, async (req, res) => {
+app.delete("/admin/api/responses/:id", requireAdmin, requireCsrf, async (req, res) => {
   try {
     const id = Number(req.params.id);
     if (!Number.isInteger(id)) return res.status(400).json({ error: "Geçersiz id." });
     await db.deleteResponse(id);
     res.json({ ok: true });
   } catch (err) {
-    console.error(err);
+    console.error("[delete]", err && err.message ? err.message : err);
     res.status(500).json({ error: "Silme hatası." });
   }
 });
@@ -178,7 +298,7 @@ async function buildWorkbook(rows) {
     { header: "ID", key: "id", width: 8 },
     { header: "Ad", key: "ad", width: 18 },
     { header: "Soyad", key: "soyad", width: 18 },
-    { header: "TC", key: "tc", width: 15 },
+    { header: "TC (maskeli)", key: "tc_masked", width: 16 },
     { header: "Tarih", key: "created_at", width: 20 }
   ];
   for (const q of questions) {
@@ -195,7 +315,7 @@ async function buildWorkbook(rows) {
       id: r.id,
       ad: r.ad,
       soyad: r.soyad,
-      tc: r.tc,
+      tc_masked: r.tc_masked,
       created_at: r.created_at
     };
     for (const q of questions) {
@@ -223,7 +343,7 @@ function buildIndividualWorkbook(r) {
   ws.addRow({ alan: "ID", deger: r.id });
   ws.addRow({ alan: "Ad", deger: r.ad });
   ws.addRow({ alan: "Soyad", deger: r.soyad });
-  ws.addRow({ alan: "TC", deger: r.tc });
+  ws.addRow({ alan: "TC (maskeli)", deger: r.tc_masked });
   ws.addRow({ alan: "Tarih", deger: r.created_at });
   ws.addRow({});
   const headerRow = ws.addRow({ alan: "SORU", deger: "CEVAP" });
@@ -252,7 +372,7 @@ app.get("/admin/api/export/all", requireAdmin, async (req, res) => {
     await wb.xlsx.write(res);
     res.end();
   } catch (err) {
-    console.error(err);
+    console.error("[export-all]", err && err.message ? err.message : err);
     res.status(500).json({ error: "Export hatası." });
   }
 });
@@ -275,7 +395,7 @@ app.get("/admin/api/export/:id", requireAdmin, async (req, res) => {
     await wb.xlsx.write(res);
     res.end();
   } catch (err) {
-    console.error(err);
+    console.error("[export-id]", err && err.message ? err.message : err);
     res.status(500).json({ error: "Export hatası." });
   }
 });

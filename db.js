@@ -14,21 +14,23 @@ const supabase = createClient(SUPABASE_URL || "", SUPABASE_SERVICE_KEY || "", {
 });
 
 const TABLE = "responses";
+// Admin panelde/Excel'de gösterilecek kolonlar — TC yerine sadece maskelenmiş hali
+const SELECT_COLS = "id, ad, soyad, tc_masked, answers, created_at";
 
-async function findByTC(tc) {
+async function findByTCHash(tcHash) {
   const { data, error } = await supabase
     .from(TABLE)
     .select("id")
-    .eq("tc", tc)
+    .eq("tc_hash", tcHash)
     .maybeSingle();
   if (error) throw error;
   return data;
 }
 
-async function insertResponse({ ad, soyad, tc, answers }) {
+async function insertResponse({ ad, soyad, tcHash, tcMasked, answers }) {
   const { data, error } = await supabase
     .from(TABLE)
-    .insert({ ad, soyad, tc, answers })
+    .insert({ ad, soyad, tc_hash: tcHash, tc_masked: tcMasked, answers })
     .select("id")
     .single();
   if (error) throw error;
@@ -38,7 +40,7 @@ async function insertResponse({ ad, soyad, tc, answers }) {
 async function listResponses() {
   const { data, error } = await supabase
     .from(TABLE)
-    .select("id, ad, soyad, tc, answers, created_at")
+    .select(SELECT_COLS)
     .order("id", { ascending: false });
   if (error) throw error;
   return data || [];
@@ -47,7 +49,7 @@ async function listResponses() {
 async function listResponsesAsc() {
   const { data, error } = await supabase
     .from(TABLE)
-    .select("id, ad, soyad, tc, answers, created_at")
+    .select(SELECT_COLS)
     .order("id", { ascending: true });
   if (error) throw error;
   return data || [];
@@ -56,7 +58,7 @@ async function listResponsesAsc() {
 async function getResponse(id) {
   const { data, error } = await supabase
     .from(TABLE)
-    .select("id, ad, soyad, tc, answers, created_at")
+    .select(SELECT_COLS)
     .eq("id", id)
     .maybeSingle();
   if (error) throw error;
@@ -70,7 +72,7 @@ async function deleteResponse(id) {
 
 module.exports = {
   supabase,
-  findByTC,
+  findByTCHash,
   insertResponse,
   listResponses,
   listResponsesAsc,

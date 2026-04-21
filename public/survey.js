@@ -13,6 +13,11 @@ function validateTC(tc) {
 const OTHER_LABEL = "Diğer";
 const identity = { ad: "", soyad: "", tc: "" };
 
+function readCookie(name) {
+  const m = document.cookie.match(new RegExp("(?:^|; )" + name + "=([^;]+)"));
+  return m ? decodeURIComponent(m[1]) : "";
+}
+
 function el(tag, attrs = {}, ...children) {
   const n = document.createElement(tag);
   for (const [k, v] of Object.entries(attrs)) {
@@ -184,7 +189,10 @@ async function onSurveySubmit(e) {
   try {
     const res = await fetch("/api/submit", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": readCookie("csrf_token")
+      },
       body: JSON.stringify({ ...identity, answers })
     });
     const data = await res.json();

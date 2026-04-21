@@ -3,39 +3,52 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Admin Giris - TReTREAT</title>
+    <title>Admin Giriş - TReTREAT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
     <header class="site-header">
       <div class="container">
-        <h1>Admin Giris</h1>
-        <p class="subtitle">TReTREAT yonetim paneli</p>
+        <h1>Admin Giriş</h1>
+        <p class="subtitle">TReTREAT yönetim paneli</p>
       </div>
     </header>
     <main class="container" style="max-width: 420px">
       <form id="loginForm" class="card">
         <label>
-          Kullanici adi
+          Kullanıcı adı
           <input type="text" name="username" autocomplete="username" required />
         </label>
         <label style="margin-top: 12px">
-          Sifre
+          Şifre
           <input type="password" name="password" autocomplete="current-password" required />
         </label>
         <div id="loginMsg" class="message" role="alert"></div>
         <div class="form-actions">
-          <button class="btn btn-primary" type="submit">Giris Yap</button>
+          <button class="btn btn-primary" type="submit">Giriş Yap</button>
         </div>
       </form>
     </main>
     <script>
+      function readCookie(name) {
+        const m = document.cookie.match(new RegExp("(?:^|; )" + name + "=([^;]+)"));
+        return m ? decodeURIComponent(m[1]) : "";
+      }
       document.getElementById("loginForm").addEventListener("submit", async (e) => {
         e.preventDefault();
         const fd = new FormData(e.currentTarget);
         const res = await fetch("/admin/login", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": readCookie("csrf_token")
+          },
           body: JSON.stringify({
             username: fd.get("username"),
             password: fd.get("password")
@@ -47,7 +60,7 @@
         } else {
           const data = await res.json().catch(() => ({}));
           msg.className = "message error";
-          msg.textContent = data.error || "Giris basarisiz.";
+          msg.textContent = data.error || "Giriş başarısız.";
         }
       });
     </script>
