@@ -153,6 +153,27 @@ async function onIdentitySubmit(e) {
   identity.soyad = soyad;
   identity.tc = tc;
 
+  // Yarım kalanları yakalamak için sunucuya başlangıcı bildir
+  try {
+    const startRes = await fetch("/api/start", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": readCookie("csrf_token")
+      },
+      body: JSON.stringify({ ad, soyad, tc })
+    });
+    if (!startRes.ok) {
+      const data = await startRes.json().catch(() => ({}));
+      showMessage("identityMessage", data.error || "Başlangıç kaydedilemedi.");
+      return;
+    }
+  } catch (err) {
+    console.error(err);
+    showMessage("identityMessage", "Ağ hatası. Lütfen tekrar deneyin.");
+    return;
+  }
+
   await loadQuestions();
 
   document.getElementById("greetingName").textContent = `${ad} ${soyad}`;

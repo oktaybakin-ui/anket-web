@@ -1,5 +1,7 @@
 let allResponses = [];
 let questions = [];
+let currentFilter = "all";
+let currentSearch = "";
 
 function readCookie(name) {
   const m = document.cookie.match(new RegExp("(?:^|; )" + name + "=([^;]+)"));
@@ -8,6 +10,21 @@ function readCookie(name) {
 
 function csrfHeaders(extra = {}) {
   return { ...extra, "X-CSRF-Token": readCookie("csrf_token") };
+}
+
+function fmtDate(s) {
+  if (!s) return "—";
+  try {
+    return new Date(s).toLocaleString("tr-TR", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+  } catch {
+    return String(s);
+  }
 }
 
 async function loadData() {
@@ -19,8 +36,39 @@ async function loadData() {
   const data = await res.json();
   questions = data.questions;
   allResponses = data.responses;
-  renderTable(allResponses);
-  document.getElementById("countBadge").textContent = `${allResponses.length} kayıt`;
+  applyFilters();
+  updateStats();
+}
+
+function updateStats() {
+  const total = allResponses.length;
+  const completed = allResponses.filter((r) => r.completed_at).length;
+  const pending = total - completed;
+  const rate = total > 0 ? Math.round((completed / total) * 100) : 0;
+  document.getElementById("statTotal").textContent = total;
+  document.getElementById("statCompleted").textContent = completed;
+  document.getElementById("statPending").textContent = pending;
+  document.getElementById("statRate").textContent = total > 0 ? `%${rate}` : "—";
+  document.getElementById("countBadge").textContent = `${total} kayıt`;
+}
+
+function applyFilters() {
+  let rows = allResponses;
+  if (currentFilter === "completed") {
+    rows = rows.filter((r) => r.completed_at);
+  } else if (currentFilter === "pending") {
+    rows = rows.filter((r) => !r.completed_at);
+  }
+  if (currentSearch) {
+    const q = currentSearch.toLowerCase();
+    rows = rows.filter(
+      (r) =>
+        r.ad.toLowerCase().includes(q) ||
+        r.soyad.toLowerCase().includes(q) ||
+        (r.tc_masked || "").includes(q)
+    );
+  }
+  renderTable(rows);
 }
 
 function renderTable(rows) {
@@ -28,21 +76,31 @@ function renderTable(rows) {
   tbody.innerHTML = "";
   if (rows.length === 0) {
     const tr = document.createElement("tr");
-    tr.innerHTML = `<td colspan="6" style="text-align:center;color:var(--muted);padding:24px">Henüz kayıt yok.</td>`;
+    tr.innerHTML = `<td colspan="8" style="text-align:center;color:var(--muted);padding:24px">Kayıt bulunamadı.</td>`;
     tbody.appendChild(tr);
     return;
   }
   for (const r of rows) {
     const tr = document.createElement("tr");
+    const completed = !!r.completed_at;
+    const badge = completed
+      ? `<span class="status-badge status-completed">Tamamlandı</span>`
+      : `<span class="status-badge status-pending">Yarım Kaldı</span>`;
+    const viewBtn = `<button class="btn btn-secondary btn-sm" data-action="view" data-id="${r.id}">Görüntüle</button>`;
+    const excelBtn = completed
+      ? `<a class="btn btn-primary btn-sm" href="/admin/api/export/${r.id}">Excel</a>`
+      : "";
     tr.innerHTML = `
       <td>${r.id}</td>
+      <td>${badge}</td>
       <td>${escapeHtml(r.ad)}</td>
       <td>${escapeHtml(r.soyad)}</td>
       <td><code>${escapeHtml(r.tc_masked || "—")}</code></td>
-      <td>${escapeHtml(r.created_at)}</td>
+      <td>${fmtDate(r.started_at)}</td>
+      <td>${completed ? fmtDate(r.completed_at) : "—"}</td>
       <td>
-        <button class="btn btn-secondary btn-sm" data-action="view" data-id="${r.id}">Görüntüle</button>
-        <a class="btn btn-primary btn-sm" href="/admin/api/export/${r.id}">Excel</a>
+        ${viewBtn}
+        ${excelBtn}
         <button class="btn btn-danger btn-sm" data-action="delete" data-id="${r.id}">Sil</button>
       </td>
     `;
@@ -58,27 +116,40 @@ function escapeHtml(s) {
 
 function showDetailModal(r) {
   const root = document.getElementById("modalRoot");
-
+  const completed = !!r.completed_at;
   const dl = document.createElement("dl");
   dl.className = "answers";
-  for (const q of questions) {
-    const dt = document.createElement("dt");
-    dt.textContent = q.text;
+  if (completed) {
+    for (const q of questions) {
+      const dt = document.createElement("dt");
+      dt.textContent = q.text;
+      const dd = document.createElement("dd");
+      let v = r.answers[q.id];
+      if (Array.isArray(v)) v = v.join(", ");
+      dd.textContent = v === undefined || v === null || v === "" ? "—" : String(v);
+      dl.appendChild(dt);
+      dl.appendChild(dd);
+    }
+  } else {
     const dd = document.createElement("dd");
-    let v = r.answers[q.id];
-    if (Array.isArray(v)) v = v.join(", ");
-    dd.textContent = v === undefined || v === null || v === "" ? "—" : String(v);
-    dl.appendChild(dt);
+    dd.style.color = "var(--muted)";
+    dd.textContent = "Bu kullanıcı kimlik bilgilerini girdi ancak anketi henüz tamamlamadı.";
     dl.appendChild(dd);
   }
 
   root.innerHTML = "";
   const backdrop = document.createElement("div");
   backdrop.className = "modal-backdrop";
+  const status = completed
+    ? `<span class="status-badge status-completed">Tamamlandı</span>`
+    : `<span class="status-badge status-pending">Yarım Kaldı</span>`;
   backdrop.innerHTML = `
     <div class="modal" role="dialog" aria-modal="true">
-      <h2>${escapeHtml(r.ad)} ${escapeHtml(r.soyad)}</h2>
-      <p style="color:var(--muted);margin-top:-2px">TC: <code>${escapeHtml(r.tc_masked || "—")}</code> · ${escapeHtml(r.created_at)}</p>
+      <h2>${escapeHtml(r.ad)} ${escapeHtml(r.soyad)} ${status}</h2>
+      <p style="color:var(--muted);margin-top:-2px">
+        TC: <code>${escapeHtml(r.tc_masked || "—")}</code><br>
+        Başlangıç: ${fmtDate(r.started_at)}${completed ? ` · Tamamlanma: ${fmtDate(r.completed_at)}` : ""}
+      </p>
     </div>
   `;
   const modal = backdrop.querySelector(".modal");
@@ -86,7 +157,7 @@ function showDetailModal(r) {
   const closeRow = document.createElement("div");
   closeRow.className = "close-row";
   closeRow.innerHTML = `
-    <a class="btn btn-primary btn-sm" href="/admin/api/export/${r.id}">Excel İndir</a>
+    ${completed ? `<a class="btn btn-primary btn-sm" href="/admin/api/export/${r.id}">Excel İndir</a>` : ""}
     <button class="btn btn-secondary btn-sm" id="closeModalBtn">Kapat</button>
   `;
   modal.appendChild(closeRow);
@@ -130,18 +201,13 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
 });
 
 document.getElementById("searchInput").addEventListener("input", (e) => {
-  const q = e.target.value.trim().toLowerCase();
-  if (!q) {
-    renderTable(allResponses);
-    return;
-  }
-  const filtered = allResponses.filter(
-    (r) =>
-      r.ad.toLowerCase().includes(q) ||
-      r.soyad.toLowerCase().includes(q) ||
-      (r.tc_masked || "").includes(q)
-  );
-  renderTable(filtered);
+  currentSearch = e.target.value.trim();
+  applyFilters();
+});
+
+document.getElementById("statusFilter").addEventListener("change", (e) => {
+  currentFilter = e.target.value;
+  applyFilters();
 });
 
 loadData();

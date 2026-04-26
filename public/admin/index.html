@@ -25,6 +25,11 @@
       </div>
       <div class="admin-actions">
         <span id="countBadge">0 kayıt</span>
+        <select id="statusFilter" aria-label="Durum filtresi">
+          <option value="all">Tümü</option>
+          <option value="completed">Tamamlananlar</option>
+          <option value="pending">Yarım kalanlar</option>
+        </select>
         <input id="searchInput" type="text" placeholder="Ara: ad, soyad veya TC" />
         <a class="btn btn-primary btn-sm" href="/admin/api/export/all">Tümünü Excel'e Aktar</a>
         <button id="logoutBtn" class="btn btn-secondary btn-sm">Çıkış</button>
@@ -32,15 +37,35 @@
     </div>
 
     <main style="padding: 0 16px 40px">
+      <div class="stats-row">
+        <div class="stat-card stat-total">
+          <div class="stat-label">Toplam Başlatan</div>
+          <div class="stat-value" id="statTotal">0</div>
+        </div>
+        <div class="stat-card stat-completed">
+          <div class="stat-label">Tamamlanan</div>
+          <div class="stat-value" id="statCompleted">0</div>
+        </div>
+        <div class="stat-card stat-pending">
+          <div class="stat-label">Yarım Kalan</div>
+          <div class="stat-value" id="statPending">0</div>
+        </div>
+        <div class="stat-card stat-rate">
+          <div class="stat-label">Tamamlama Oranı</div>
+          <div class="stat-value" id="statRate">—</div>
+        </div>
+      </div>
       <div class="table-wrap">
         <table id="responsesTable">
           <thead>
             <tr>
               <th>ID</th>
+              <th>Durum</th>
               <th>Ad</th>
               <th>Soyad</th>
               <th>TC (maskeli)</th>
-              <th>Tarih</th>
+              <th>Başlangıç</th>
+              <th>Tamamlanma</th>
               <th style="width: 260px">İşlemler</th>
             </tr>
           </thead>

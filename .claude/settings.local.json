@@ -48,7 +48,12 @@
       "Bash(rm -f \"Gemini_Generated_Image_dr8e95dr8e95dr8e.png\")",
       "Bash(echo \"Gemini_Generated_*.png\")",
       "Bash(curl -sSL https://anket-web.vercel.app/)",
-      "Bash(curl -sSL https://anket-web.vercel.app/styles.css)"
+      "Bash(curl -sSL https://anket-web.vercel.app/styles.css)",
+      "mcp__afff092e-2a74-431e-8bbe-8bb3f177c17c__get_logs",
+      "Bash(node -c utils/mail.js)",
+      "Bash(git add *)",
+      "Bash(git commit -m 'Track all started attempts; admin status filter; email on completion *)",
+      "Bash(git push *)"
     ]
   }
 }

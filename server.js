@@ -12,6 +12,7 @@ const ExcelJS = require("exceljs");
 const db = require("./db");
 const questions = require("./questions");
 const { validateTC, hashTC, maskTC } = require("./utils/tc");
+const { sendMail, escapeHtml } = require("./utils/mail");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -94,12 +95,58 @@ const submitLimiter = rateLimit({
   message: { error: "Çok fazla istek. Bir saat sonra tekrar deneyin." }
 });
 
+const startLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Çok fazla deneme. Bir saat sonra tekrar deneyin." }
+});
+
 const adminApiLimiter = rateLimit({
   windowMs: 60 * 1000,
   max: 60,
   standardHeaders: true,
   legacyHeaders: false
 });
+
+// --- Mail ---
+async function sendCompletionEmail({ ad, soyad, tcMasked, id }) {
+  const to = process.env.MAIL_TO;
+  if (!to) return; // alıcı tanımlı değil
+  const when = new Date().toLocaleString("tr-TR", { timeZone: "Europe/Istanbul" });
+  const adminUrl = process.env.PUBLIC_URL
+    ? `${process.env.PUBLIC_URL.replace(/\/$/, "")}/admin/index.html`
+    : null;
+  const html = `
+    <div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;color:#0f172a;max-width:560px">
+      <h2 style="margin:0 0 8px;color:#0b6e99">Yeni anket tamamlandı</h2>
+      <p style="margin:0 0 16px;color:#475569">TReTREAT — Turkish Re-irradiation Workflow Survey</p>
+      <table cellpadding="8" style="border-collapse:collapse;width:100%;border:1px solid #e2e8f0;border-radius:8px">
+        <tr><td style="border-bottom:1px solid #e2e8f0;color:#64748b">Kayıt No</td><td style="border-bottom:1px solid #e2e8f0"><strong>#${escapeHtml(id)}</strong></td></tr>
+        <tr><td style="border-bottom:1px solid #e2e8f0;color:#64748b">Ad Soyad</td><td style="border-bottom:1px solid #e2e8f0">${escapeHtml(ad)} ${escapeHtml(soyad)}</td></tr>
+        <tr><td style="border-bottom:1px solid #e2e8f0;color:#64748b">TC (maskeli)</td><td style="border-bottom:1px solid #e2e8f0"><code>${escapeHtml(tcMasked || "—")}</code></td></tr>
+        <tr><td style="color:#64748b">Tarih</td><td>${escapeHtml(when)}</td></tr>
+      </table>
+      ${
+        adminUrl
+          ? `<p style="margin:18px 0 0"><a href="${adminUrl}" style="background:#0b6e99;color:#fff;padding:10px 16px;border-radius:8px;text-decoration:none;display:inline-block">Admin Panele Git</a></p>`
+          : ""
+      }
+      <p style="margin-top:18px;color:#94a3b8;font-size:12px">Bu otomatik bildirim TReTREAT anketinden gönderilmiştir.</p>
+    </div>`;
+  const text = `Yeni anket tamamlandı.
+Kayıt No: ${id}
+Ad Soyad: ${ad} ${soyad}
+TC (maskeli): ${tcMasked || "—"}
+Tarih: ${when}`;
+  return sendMail({
+    to,
+    subject: `[TReTREAT] Yeni yanıt: ${ad} ${soyad}`,
+    html,
+    text
+  });
+}
 
 // Static files
 app.use(express.static(path.join(__dirname, "public"), { index: false }));
@@ -121,32 +168,61 @@ app.get("/api/questions", (req, res) => {
   res.json(questions);
 });
 
-app.post("/api/submit", submitLimiter, ensureCsrfCookie, requireCsrf, async (req, res) => {
+function parseIdentity(body) {
+  const { ad, soyad, tc } = body || {};
+  if (!ad || !soyad || !tc) {
+    return { error: "Ad, soyad ve TC zorunludur." };
+  }
+  const adClean = String(ad).trim().slice(0, 60);
+  const soyadClean = String(soyad).trim().slice(0, 60);
+  const tcClean = String(tc).trim();
+  if (adClean.length < 2 || soyadClean.length < 2) {
+    return { error: "Ad ve soyad en az 2 karakter olmalıdır." };
+  }
+  if (!validateTC(tcClean)) {
+    return { error: "Geçersiz TC Kimlik No." };
+  }
+  return {
+    adClean,
+    soyadClean,
+    tcHash: hashTC(tcClean),
+    tcMasked: maskTC(tcClean)
+  };
+}
+
+// Kullanıcı kimlik formunu gönderdiğinde (yarım kalanları yakalamak için)
+app.post("/api/start", startLimiter, ensureCsrfCookie, requireCsrf, async (req, res) => {
   try {
-    const { ad, soyad, tc, answers } = req.body || {};
-    if (!ad || !soyad || !tc) {
-      return res.status(400).json({ error: "Ad, soyad ve TC zorunludur." });
-    }
-    const adClean = String(ad).trim().slice(0, 60);
-    const soyadClean = String(soyad).trim().slice(0, 60);
-    const tcClean = String(tc).trim();
+    const parsed = parseIdentity(req.body);
+    if (parsed.error) return res.status(400).json({ error: parsed.error });
 
-    if (adClean.length < 2 || soyadClean.length < 2) {
-      return res.status(400).json({ error: "Ad ve soyad en az 2 karakter olmalıdır." });
-    }
-    if (!validateTC(tcClean)) {
-      return res.status(400).json({ error: "Geçersiz TC Kimlik No." });
-    }
-
-    const tcHash = hashTC(tcClean);
-    const tcMasked = maskTC(tcClean);
-
-    const existing = await db.findByTCHash(tcHash);
-    if (existing) {
+    const existing = await db.findByTCHash(parsed.tcHash);
+    if (existing && existing.completed_at) {
       return res.status(409).json({ error: "Bu TC ile daha önce anket doldurulmuş." });
     }
 
-    const answersObj = answers && typeof answers === "object" ? answers : {};
+    await db.startAttempt({
+      ad: parsed.adClean,
+      soyad: parsed.soyadClean,
+      tcHash: parsed.tcHash,
+      tcMasked: parsed.tcMasked
+    });
+    res.json({ ok: true });
+  } catch (err) {
+    console.error("[start]", err && err.message ? err.message : err);
+    res.status(500).json({ error: "Sunucu hatası." });
+  }
+});
+
+app.post("/api/submit", submitLimiter, ensureCsrfCookie, requireCsrf, async (req, res) => {
+  try {
+    const parsed = parseIdentity(req.body);
+    if (parsed.error) return res.status(400).json({ error: parsed.error });
+
+    const answersObj =
+      req.body && req.body.answers && typeof req.body.answers === "object"
+        ? req.body.answers
+        : {};
     const normalized = {};
     for (const q of questions) {
       let v = answersObj[q.id];
@@ -173,13 +249,30 @@ app.post("/api/submit", submitLimiter, ensureCsrfCookie, requireCsrf, async (req
       if (v !== undefined) normalized[q.id] = v;
     }
 
-    const inserted = await db.insertResponse({
-      ad: adClean,
-      soyad: soyadClean,
-      tcHash,
-      tcMasked,
-      answers: normalized
-    });
+    let inserted;
+    try {
+      inserted = await db.completeResponse({
+        ad: parsed.adClean,
+        soyad: parsed.soyadClean,
+        tcHash: parsed.tcHash,
+        tcMasked: parsed.tcMasked,
+        answers: normalized
+      });
+    } catch (err) {
+      if (err && err.code === "ALREADY_COMPLETED") {
+        return res.status(409).json({ error: err.message });
+      }
+      throw err;
+    }
+
+    // Tamamlanma e-postası (varsa) — engellemeden gönder
+    sendCompletionEmail({
+      ad: parsed.adClean,
+      soyad: parsed.soyadClean,
+      tcMasked: parsed.tcMasked,
+      id: inserted.id
+    }).catch((e) => console.error("[mail]", e && e.message ? e.message : e));
+
     res.json({ ok: true, id: inserted.id });
   } catch (err) {
     console.error("[submit]", err && err.message ? err.message : err);
@@ -296,10 +389,12 @@ async function buildWorkbook(rows) {
 
   const columns = [
     { header: "ID", key: "id", width: 8 },
+    { header: "Durum", key: "durum", width: 14 },
     { header: "Ad", key: "ad", width: 18 },
     { header: "Soyad", key: "soyad", width: 18 },
     { header: "TC (maskeli)", key: "tc_masked", width: 16 },
-    { header: "Tarih", key: "created_at", width: 20 }
+    { header: "Başlangıç", key: "started_at", width: 20 },
+    { header: "Tamamlanma", key: "completed_at", width: 20 }
   ];
   for (const q of questions) {
     columns.push({ header: q.text, key: q.id, width: 30 });
@@ -313,10 +408,12 @@ async function buildWorkbook(rows) {
   for (const r of rows) {
     const row = {
       id: r.id,
+      durum: r.completed_at ? "Tamamlandı" : "Yarım Kaldı",
       ad: r.ad,
       soyad: r.soyad,
       tc_masked: r.tc_masked,
-      created_at: r.created_at
+      started_at: r.started_at,
+      completed_at: r.completed_at || ""
     };
     for (const q of questions) {
       row[q.id] = formatAnswerForExcel(q, (r.answers || {})[q.id]);
@@ -341,10 +438,12 @@ function buildIndividualWorkbook(r) {
   ws.getRow(1).font = { bold: true };
 
   ws.addRow({ alan: "ID", deger: r.id });
+  ws.addRow({ alan: "Durum", deger: r.completed_at ? "Tamamlandı" : "Yarım Kaldı" });
   ws.addRow({ alan: "Ad", deger: r.ad });
   ws.addRow({ alan: "Soyad", deger: r.soyad });
   ws.addRow({ alan: "TC (maskeli)", deger: r.tc_masked });
-  ws.addRow({ alan: "Tarih", deger: r.created_at });
+  ws.addRow({ alan: "Başlangıç", deger: r.started_at });
+  ws.addRow({ alan: "Tamamlanma", deger: r.completed_at || "—" });
   ws.addRow({});
   const headerRow = ws.addRow({ alan: "SORU", deger: "CEVAP" });
   headerRow.font = { bold: true };
