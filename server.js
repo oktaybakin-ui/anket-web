@@ -11,7 +11,7 @@ const ExcelJS = require("exceljs");
 
 const db = require("./db");
 const { questions, isQuestionVisible } = require("./questions");
-const { validateEmail, normalizeEmail } = require("./utils/contact");
+const { validateEmail, normalizeEmail, hasValidEmailDomain } = require("./utils/contact");
 const { sendMail, escapeHtml } = require("./utils/mail");
 
 const app = express();
@@ -191,6 +191,14 @@ app.post("/api/start", startLimiter, ensureCsrfCookie, requireCsrf, async (req, 
     const parsed = parseIdentity(req.body);
     if (parsed.error) return res.status(400).json({ error: parsed.error });
 
+    // MX kontrolü — domain gerçekten mail alabilen bir sunucu mu?
+    const domainOk = await hasValidEmailDomain(parsed.email);
+    if (!domainOk) {
+      return res.status(400).json({
+        error: "E-posta adresinin domaini geçerli görünmüyor. Lütfen kontrol ediniz."
+      });
+    }
+
     const existing = await db.findByEmail(parsed.email);
     if (existing && existing.completed_at) {
       return res.status(409).json({ error: "Bu e-posta ile daha önce anket doldurulmuş." });
@@ -212,6 +220,14 @@ app.post("/api/submit", submitLimiter, ensureCsrfCookie, requireCsrf, async (req
   try {
     const parsed = parseIdentity(req.body);
     if (parsed.error) return res.status(400).json({ error: parsed.error });
+
+    // MX kontrolü (start çağrılmadıysa burada yakala)
+    const domainOk = await hasValidEmailDomain(parsed.email);
+    if (!domainOk) {
+      return res.status(400).json({
+        error: "E-posta adresinin domaini geçerli görünmüyor. Lütfen kontrol ediniz."
+      });
+    }
 
     const answersObj =
       req.body && req.body.answers && typeof req.body.answers === "object"
