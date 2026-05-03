@@ -9,7 +9,7 @@
   "crons": [
     {
       "path": "/api/cron/backup",
-      "schedule": "0 7 */5 * *"
+      "schedule": "0 7 * * *"
     }
   ]
 }

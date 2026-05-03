@@ -300,7 +300,7 @@ app.post("/api/submit", submitLimiter, ensureCsrfCookie, requireCsrf, async (req
   }
 });
 
-// --- Cron: 5 günde bir Excel yedeği maile gönder ---
+// --- Cron: Günlük Excel yedeği maile gönder ---
 //
 // Vercel cron'u path'e GET isteği atar. Yetki için:
 //   - Vercel Cron isteklerinde Authorization: Bearer <CRON_SECRET> başlığı gönderilir
@@ -336,21 +336,21 @@ app.get("/api/cron/backup", async (req, res) => {
 
     const html = `
       <div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;color:#0f172a;max-width:560px">
-        <h2 style="margin:0 0 8px;color:#0b6e99">Otomatik 5 günlük yedek</h2>
+        <h2 style="margin:0 0 8px;color:#0b6e99">Otomatik günlük yedek</h2>
         <p style="margin:0 0 16px;color:#475569">TReTREAT — ${escapeHtml(today)}</p>
         <table cellpadding="8" style="border-collapse:collapse;width:100%;border:1px solid #e2e8f0;border-radius:8px">
           <tr><td style="border-bottom:1px solid #e2e8f0;color:#64748b">Toplam başlatan</td><td style="border-bottom:1px solid #e2e8f0"><strong>${rows.length}</strong></td></tr>
           <tr><td style="border-bottom:1px solid #e2e8f0;color:#64748b">Tamamlanan</td><td style="border-bottom:1px solid #e2e8f0"><strong style="color:#047857">${completed}</strong></td></tr>
           <tr><td style="color:#64748b">Yarım kalan</td><td><strong style="color:#b45309">${pending}</strong></td></tr>
         </table>
-        <p style="margin:18px 0 0;color:#475569;font-size:14px">Tüm kayıtlar ekteki Excel dosyasında. Bu mail her 5 günde bir otomatik gönderilir.</p>
+        <p style="margin:18px 0 0;color:#475569;font-size:14px">Tüm kayıtlar ekteki Excel dosyasında. Bu mail her gün otomatik gönderilir.</p>
         <p style="margin-top:18px;color:#94a3b8;font-size:12px">Otomatik yedek · TReTREAT cron sistemi</p>
       </div>`;
-    const text = `TReTREAT 5 günlük yedek — ${today}\nToplam: ${rows.length}\nTamamlanan: ${completed}\nYarım kalan: ${pending}\nEkteki ${filename} dosyasında tüm kayıtlar mevcuttur.`;
+    const text = `TReTREAT günlük yedek — ${today}\nToplam: ${rows.length}\nTamamlanan: ${completed}\nYarım kalan: ${pending}\nEkteki ${filename} dosyasında tüm kayıtlar mevcuttur.`;
 
     await sendMail({
       to,
-      subject: `[TReTREAT] 5 günlük yedek — ${today} (${rows.length} kayıt)`,
+      subject: `[TReTREAT] Günlük yedek — ${today} (${rows.length} kayıt)`,
       html,
       text,
       attachments: [{ filename, content: base64 }]
