@@ -284,6 +284,69 @@ app.post("/api/submit", submitLimiter, ensureCsrfCookie, requireCsrf, async (req
   }
 });
 
+// --- Cron: 5 günde bir Excel yedeği maile gönder ---
+//
+// Vercel cron'u path'e GET isteği atar. Yetki için:
+//   - Vercel Cron isteklerinde Authorization: Bearer <CRON_SECRET> başlığı gönderilir
+//   - CRON_SECRET env var olarak tanımlı olmalı
+// Manuel test: curl -H "Authorization: Bearer $CRON_SECRET" https://.../api/cron/backup
+app.get("/api/cron/backup", async (req, res) => {
+  const expected = process.env.CRON_SECRET;
+  const authHeader = req.headers.authorization || "";
+  // Vercel cron veya manuel: Bearer token zorunlu
+  if (!expected) {
+    return res.status(503).json({ error: "CRON_SECRET tanımlı değil." });
+  }
+  if (authHeader !== `Bearer ${expected}`) {
+    return res.status(401).json({ error: "Yetkisiz." });
+  }
+
+  try {
+    const rows = await db.listResponsesAsc();
+    const wb = await buildWorkbook(rows);
+    const buffer = await wb.xlsx.writeBuffer();
+    const base64 = Buffer.from(buffer).toString("base64");
+
+    const completed = rows.filter((r) => r.completed_at).length;
+    const pending = rows.length - completed;
+    const today = new Date().toLocaleDateString("tr-TR", { timeZone: "Europe/Istanbul" });
+    const filename = `tretreat-yedek-${new Date().toISOString().slice(0, 10)}.xlsx`;
+
+    const to = process.env.MAIL_TO;
+    if (!to) {
+      console.warn("[cron] MAIL_TO tanımlı değil; mail atılmadı.");
+      return res.json({ ok: false, reason: "MAIL_TO eksik", rows: rows.length });
+    }
+
+    const html = `
+      <div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;color:#0f172a;max-width:560px">
+        <h2 style="margin:0 0 8px;color:#0b6e99">Otomatik 5 günlük yedek</h2>
+        <p style="margin:0 0 16px;color:#475569">TReTREAT — ${escapeHtml(today)}</p>
+        <table cellpadding="8" style="border-collapse:collapse;width:100%;border:1px solid #e2e8f0;border-radius:8px">
+          <tr><td style="border-bottom:1px solid #e2e8f0;color:#64748b">Toplam başlatan</td><td style="border-bottom:1px solid #e2e8f0"><strong>${rows.length}</strong></td></tr>
+          <tr><td style="border-bottom:1px solid #e2e8f0;color:#64748b">Tamamlanan</td><td style="border-bottom:1px solid #e2e8f0"><strong style="color:#047857">${completed}</strong></td></tr>
+          <tr><td style="color:#64748b">Yarım kalan</td><td><strong style="color:#b45309">${pending}</strong></td></tr>
+        </table>
+        <p style="margin:18px 0 0;color:#475569;font-size:14px">Tüm kayıtlar ekteki Excel dosyasında. Bu mail her 5 günde bir otomatik gönderilir.</p>
+        <p style="margin-top:18px;color:#94a3b8;font-size:12px">Otomatik yedek · TReTREAT cron sistemi</p>
+      </div>`;
+    const text = `TReTREAT 5 günlük yedek — ${today}\nToplam: ${rows.length}\nTamamlanan: ${completed}\nYarım kalan: ${pending}\nEkteki ${filename} dosyasında tüm kayıtlar mevcuttur.`;
+
+    await sendMail({
+      to,
+      subject: `[TReTREAT] 5 günlük yedek — ${today} (${rows.length} kayıt)`,
+      html,
+      text,
+      attachments: [{ filename, content: base64 }]
+    });
+
+    res.json({ ok: true, rows: rows.length, completed, pending });
+  } catch (err) {
+    console.error("[cron]", err && err.message ? err.message : err);
+    res.status(500).json({ error: "Cron hatası." });
+  }
+});
+
 // --- Admin auth ---
 
 function signToken() {
