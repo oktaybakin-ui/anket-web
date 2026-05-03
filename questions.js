@@ -88,7 +88,7 @@ const questions = [
     "text": "S7-Çalıştığınız kurumda yılda yaklaşık kaç hastaya re-RT uygulanmaktadır?",
     "section": "BÖLÜM 1 — Katılımcı ve Kurum Profili",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "radio",
@@ -105,7 +105,7 @@ const questions = [
     "text": "S8-Çalıştığınız kurumda yılda yaklaşık kaç pediatrik hastaya re-RT uygulanmaktadır?",
     "section": "BÖLÜM 1 — Katılımcı ve Kurum Profili",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "radio",
@@ -122,7 +122,7 @@ const questions = [
     "text": "S9-Çalıştığınız kurumda hangi radyoterapi teknikleri / teknolojileri kullanılmaktadır?",
     "section": "BÖLÜM 1 — Katılımcı ve Kurum Profili",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "checkbox",
@@ -149,7 +149,7 @@ const questions = [
     "text": "S10-Çalıştığınız kurumda hangi tedavi planlama sistemi / sistemleri kullanılmaktadır?",
     "section": "BÖLÜM 1 — Katılımcı ve Kurum Profili",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "checkbox",
@@ -169,7 +169,7 @@ const questions = [
     "text": "S11-Çalıştığınız kurumda re-RT vakaları ESTRO / EORTC konsensüs tanımlarına göre sınıflandırılıyor mu?\nTip 1: Önceki ve yeni ışınlanan hacimler arasında geometrik örtüşme vardır.\nTip 2: Geometrik örtüşme yoktur; ancak kümülatif doz nedeniyle toksisite endişesi vardır.\nTekrarlayan Organ Işınlaması: Aynı organ yeniden ışınlanır; geometrik örtüşme ve belirgin kümülatif doz/toksisite endişesi yoktur.",
     "section": "BÖLÜM 2 — Sınıflandırma ve Kayıt Sistemi",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "checkbox",
@@ -186,7 +186,7 @@ const questions = [
     "text": "S12-Kurumunuzda re-RT için yazılı bir klinik protokol / iş akışı var mı?",
     "section": "BÖLÜM 2 — Sınıflandırma ve Kayıt Sistemi",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "checkbox",
@@ -204,7 +204,7 @@ const questions = [
     "text": "S13-Re-RT uygulamalarında peer review (meslektaş değerlendirmesi) yapıyor musunuz?",
     "section": "BÖLÜM 2 — Sınıflandırma ve Kayıt Sistemi",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "checkbox",
@@ -221,7 +221,7 @@ const questions = [
     "text": "S14-Re-RT iş akışı ve kararlarını ayrıca dokümante ediyor musunuz?",
     "section": "BÖLÜM 2 — Sınıflandırma ve Kayıt Sistemi",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "checkbox",
@@ -240,7 +240,7 @@ const questions = [
     "text": "S15-Önceki RT plan verilerine ne sıklıkla ulaşıyorsunuz?",
     "section": "BÖLÜM 3 — Veri Erişimi ve Kalitesi",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "radio",
@@ -258,7 +258,7 @@ const questions = [
     "text": "S16- Re-RT planlama öncesinde hastanın önceki radyoterapiye ait planlama verilerine genellikle hangi düzeyde erişebiliyorsunuz?",
     "section": "BÖLÜM 3 — Veri Erişimi ve Kalitesi",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "radio",
@@ -276,7 +276,7 @@ const questions = [
     "text": "S17- Re-RT kararı verirken aşağıda belirtilen ilk tedavi verilerinin önemini değerlendiriniz.",
     "section": "BÖLÜM 3 — Veri Erişimi ve Kalitesi",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "grid",
@@ -308,7 +308,7 @@ const questions = [
     "text": "S18-Önceki tedavinin plan verileri (DICOM, doz dağılımı vb.) rutin olarak sisteme entegre ediliyor mu?",
     "section": "BÖLÜM 3 — Veri Erişimi ve Kalitesi",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "radio",
@@ -326,7 +326,7 @@ const questions = [
     "text": "S19-Önceki tedavinin verileri başka bir kurumdan geldiğinde en çok hangi zorluklarla karşılaşıyorsunuz?",
     "section": "BÖLÜM 3 — Veri Erişimi ve Kalitesi",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "checkbox",
@@ -352,7 +352,7 @@ const questions = [
     "text": "S20-Önceki tedavi verileri başka bir kurumdan talep edildiğinde, hasta verilerinin paylaşımında KVKK kapsamında sorun/engel yaşıyor musunuz?",
     "section": "BÖLÜM 3 — Veri Erişimi ve Kalitesi",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "radio",
@@ -370,7 +370,7 @@ const questions = [
     "text": "S21-Önceki tedavi planının DICOM verilerine ulaşılamıyorsa nasıl bir yol izliyorsunuz?",
     "section": "BÖLÜM 3 — Veri Erişimi ve Kalitesi",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "checkbox",
@@ -390,7 +390,7 @@ const questions = [
     "text": "S22-Re-RT planlamasında, BT simülasyona ek olarak, hangi görüntüleme modalitelerini kullanıyorsunuz?",
     "section": "BÖLÜM 4 — Simülasyon, Görüntüleme ve Pozisyonlama",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "checkbox",
@@ -409,7 +409,7 @@ const questions = [
     "text": "S23-Simülasyonda önceki tedaviyle aynı immobilizasyonu / pozisyonu korumaya çalışıyor musunuz?",
     "section": "BÖLÜM 4 — Simülasyon, Görüntüleme ve Pozisyonlama",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "radio",
@@ -426,7 +426,7 @@ const questions = [
     "text": "S24-Re-RT simülasyonunda solunum / hareket yönetimi uyguluyor musunuz?",
     "section": "BÖLÜM 4 — Simülasyon, Görüntüleme ve Pozisyonlama",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "radio",
@@ -443,7 +443,7 @@ const questions = [
     "text": "S25-Önceki tedavide kullanılan hedef hacimler ve konturlar re-RT planlamasında nasıl kullanılıyor?",
     "section": "BÖLÜM 4 — Simülasyon, Görüntüleme ve Pozisyonlama",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "radio",
@@ -461,7 +461,7 @@ const questions = [
     "text": "S26-Kurumunuzda Re-RT uyguladığınız anatomik bölgeler hangileridir?",
     "section": "BÖLÜM 5 — Planlama ve Dozimetrik Değerlendirme",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "checkbox",
@@ -485,7 +485,7 @@ const questions = [
     "text": "S27-Kurumunuzda re-RT uygulamalarında Radyasyon Onkolojisi Uzmanı – Medikal Fizik Uzmanı iletişimi hangi aşamada başlamaktadır?",
     "section": "BÖLÜM 5 — Planlama ve Dozimetrik Değerlendirme",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "radio",
@@ -505,7 +505,7 @@ const questions = [
     "text": "S28-Re-RT planlamasında hangi tedavi modalitelerini kullanıyorsunuz?",
     "section": "BÖLÜM 5 — Planlama ve Dozimetrik Değerlendirme",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "checkbox",
@@ -525,7 +525,7 @@ const questions = [
     "text": "S29-Re-RT planlamasında önceki tedaviye ait görüntüleri mevcut görüntülerle füzyon yapıyor musunuz?",
     "section": "BÖLÜM 5 — Planlama ve Dozimetrik Değerlendirme",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "checkbox",
@@ -544,7 +544,7 @@ const questions = [
     "text": "S30-Kümülatif doz değerlendirmesi yaparken hangi yöntemleri kullanıyorsunuz?",
     "section": "BÖLÜM 5 — Planlama ve Dozimetrik Değerlendirme",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "checkbox",
@@ -569,7 +569,7 @@ const questions = [
     "text": "S31-Kümülatif doz değerlendirmesi re-RT kararında zorunlu olmalıdır.",
     "section": "BÖLÜM 5 — Planlama ve Dozimetrik Değerlendirme",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "radio",
@@ -587,7 +587,7 @@ const questions = [
     "text": "S32-Kümülatif doz değerlendirmesi yaparken EQD2/ BED hesaplaması yapıyor musunuz?",
     "section": "BÖLÜM 5 — Planlama ve Dozimetrik Değerlendirme",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "radio",
@@ -605,7 +605,7 @@ const questions = [
     "text": "S33-Kümülatif doz hesabında önceki tedavi ile yeni tedavi arasındaki süreyi (interval) dikkate alıyor musunuz?",
     "section": "BÖLÜM 5 — Planlama ve Dozimetrik Değerlendirme",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "radio",
@@ -624,7 +624,7 @@ const questions = [
     "text": "S34-Doku iyileşme (recovery) faktörü uyguladığınızda hangi yaklaşımı benimsiyorsunuz?",
     "section": "BÖLÜM 5 — Planlama ve Dozimetrik Değerlendirme",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "checkbox",
@@ -643,7 +643,7 @@ const questions = [
     "text": "S35-DICOM-RT verisi bulunmayan olgularda, önceki radyoterapiyi temsil edecek yaklaşık/temsili bir plan (replica plan) oluşturuyor musunuz?",
     "section": "BÖLÜM 5 — Planlama ve Dozimetrik Değerlendirme",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "radio",
@@ -660,7 +660,7 @@ const questions = [
     "text": "S36-Doz haritalama / doz akümülasyonu yapamadığınız durumlarda kümülatif dozu değerlendirmek için hangi yöntemleri kullanıyorsunuz?",
     "section": "BÖLÜM 5 — Planlama ve Dozimetrik Değerlendirme",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "checkbox",
@@ -680,7 +680,7 @@ const questions = [
     "text": "S37-Kurumunuzda re-RT uygulamasına özel bir kontrol listesi (checklist) var mı?",
     "section": "BÖLÜM 5 — Planlama ve Dozimetrik Değerlendirme",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "radio",
@@ -695,7 +695,7 @@ const questions = [
     "text": "S38-Re-RT vakaları sistematik veri tabanına kaydediliyor mu?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "radio",
@@ -712,7 +712,7 @@ const questions = [
     "text": "S39-Re-RT raporlamasında aşağıdakilerden hangilerinin rutin olarak yer alması gerektiğini düşünüyorsunuz?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "checkbox",
@@ -738,7 +738,7 @@ const questions = [
     "text": "S40-Re-RT planlaması ve uygulamasına yönelik aldığınız eğitimi yeterli buluyor musunuz?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "radio",
@@ -756,7 +756,7 @@ const questions = [
     "text": "S41-Re-RT konusunda klinik yeterliliğinizi ne düzeyde değerlendiriyorsunuz?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "radio",
@@ -774,7 +774,7 @@ const questions = [
     "text": "S42-Re-RT için ulusal bir protokol/kılavuz oluşturulmasına ihtiyaç olduğunu düşünüyor musunuz?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "radio",
@@ -792,7 +792,7 @@ const questions = [
     "text": "S43-Re-RT kararında sizce en önemli standartlaştırılması gereken alanlar hangileridir?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "checkbox",
@@ -817,7 +817,7 @@ const questions = [
     "text": "S44-Ulusal re-RT protokolü oluşturulmasının önündeki engeller sizce nelerdir?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "checkbox",
@@ -840,7 +840,7 @@ const questions = [
     "text": "S45-Ulusal re-RT kılavuzunun hazırlanmasında hangi yaklaşımların kullanılmasını uygun bulursunuz?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "checkbox",
@@ -860,7 +860,7 @@ const questions = [
     "text": "S46-Türkiye’de re-RT konusunda planlanacak çok merkezli prospektif bir çalışmaya katılmak ister misiniz?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "radio",
@@ -876,7 +876,7 @@ const questions = [
     "text": "S47-Re-RT pratiğinizde altyapı açısından en önemli eksiklikler nelerdir?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "checkbox",
@@ -906,7 +906,7 @@ const questions = [
     "text": "S48-Ulusal TReTREAT görev grubundan beklentiniz nedir?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "checkbox",
@@ -928,7 +928,7 @@ const questions = [
     "text": "S49-Mesleğiniz nedir?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Evet"
     },
     "type": "radio",
@@ -945,11 +945,11 @@ const questions = [
     "showIf": {
       "allOf": [
         {
-          "id": "S6",
+          "id": "s6",
           "equals": "Evet"
         },
         {
-          "id": "S49",
+          "id": "s49",
           "equals": "Radyasyon Onkoloğu"
         }
       ]
@@ -972,11 +972,11 @@ const questions = [
     "showIf": {
       "allOf": [
         {
-          "id": "S6",
+          "id": "s6",
           "equals": "Evet"
         },
         {
-          "id": "S49",
+          "id": "s49",
           "equals": "Radyasyon Onkoloğu"
         }
       ]
@@ -997,11 +997,11 @@ const questions = [
     "showIf": {
       "allOf": [
         {
-          "id": "S6",
+          "id": "s6",
           "equals": "Evet"
         },
         {
-          "id": "S49",
+          "id": "s49",
           "equals": "Radyasyon Onkoloğu"
         }
       ]
@@ -1023,11 +1023,11 @@ const questions = [
     "showIf": {
       "allOf": [
         {
-          "id": "S6",
+          "id": "s6",
           "equals": "Evet"
         },
         {
-          "id": "S49",
+          "id": "s49",
           "equals": "Radyasyon Onkoloğu"
         }
       ]
@@ -1049,11 +1049,11 @@ const questions = [
     "showIf": {
       "allOf": [
         {
-          "id": "S6",
+          "id": "s6",
           "equals": "Evet"
         },
         {
-          "id": "S49",
+          "id": "s49",
           "equals": "Radyasyon Onkoloğu"
         }
       ]
@@ -1084,11 +1084,11 @@ const questions = [
     "showIf": {
       "allOf": [
         {
-          "id": "S6",
+          "id": "s6",
           "equals": "Evet"
         },
         {
-          "id": "S49",
+          "id": "s49",
           "equals": "Radyasyon Onkoloğu"
         }
       ]
@@ -1119,11 +1119,11 @@ const questions = [
     "showIf": {
       "allOf": [
         {
-          "id": "S6",
+          "id": "s6",
           "equals": "Evet"
         },
         {
-          "id": "S49",
+          "id": "s49",
           "equals": "Radyasyon Onkoloğu"
         }
       ]
@@ -1153,11 +1153,11 @@ const questions = [
     "showIf": {
       "allOf": [
         {
-          "id": "S6",
+          "id": "s6",
           "equals": "Evet"
         },
         {
-          "id": "S49",
+          "id": "s49",
           "equals": "Radyasyon Onkoloğu"
         }
       ]
@@ -1185,7 +1185,7 @@ const questions = [
     "text": "6a-Re-RT uygulanmamasının nedenleri nelerdir?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Hayır"
     },
     "type": "checkbox",
@@ -1207,7 +1207,7 @@ const questions = [
     "text": "6b-Re-RT uygulamalarının güvenli ve etkin biçimde yürütülebilmesi için öncelikli olarak neye ihtiyaç duyuyorsunuz?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Hayır"
     },
     "type": "checkbox",
@@ -1227,7 +1227,7 @@ const questions = [
     "text": "6c-Re-RT konusunda düzenlenecek ulusal / uluslararası eğitim veya kurslara katılmak ister misiniz?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Hayır"
     },
     "type": "radio",
@@ -1243,7 +1243,7 @@ const questions = [
     "text": "6d-Ulusal bir re-RT kılavuzu / protokolü olması, re-RT uygulama eğiliminizi artırır mıydı?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Hayır"
     },
     "type": "radio",
@@ -1260,7 +1260,7 @@ const questions = [
     "text": "6e-Re-RT konusunda kendinizi ne kadar bilgili hissediyorsunuz?\n1- Hiç bilgi sahibi değilim\n2- Sınırlı düzeyde bilgi sahibiyim\n3- Orta düzeyde bilgi sahibiyim\n4- İyi düzeyde bilgi sahibiyim\n5- Çok iyi düzeyde bilgi sahibiyim",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
-      "id": "S6",
+      "id": "s6",
       "equals": "Hayır"
     },
     "type": "radio",

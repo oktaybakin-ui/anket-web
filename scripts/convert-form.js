@@ -88,8 +88,8 @@ let currentSection = null;
 const EVET_SECTION_ID = 1128462934;
 const HAYIR_SECTION_ID = 488416181;
 const ONKOLOG_SECTION_ID = 1825787695;
-const Q_RE_RT_VAR_MI = "S6";
-const Q_MESLEK = "S49";
+const Q_RE_RT_VAR_MI = "s6";
+const Q_MESLEK = "s49";
 
 function showIfFromIdx(idx) {
   // Hangi section içindeyim?
