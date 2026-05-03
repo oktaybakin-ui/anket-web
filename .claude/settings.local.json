@@ -70,7 +70,10 @@
       "Bash(node -c questions.js)",
       "Bash(node -c utils/contact.js)",
       "Bash(node -e \"const {questions, isQuestionVisible} = require\\('./questions'\\); console.log\\('OK soru:', questions.length, 'showIf:', questions.filter\\(q=>q.showIf\\).length\\)\")",
-      "Bash(git commit -m 'Replace TC with email; switch to Google Form survey with branching + grid *)"
+      "Bash(git commit -m 'Replace TC with email; switch to Google Form survey with branching + grid *)",
+      "Bash(curl -sSL https://anket-web.vercel.app/api/questions)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('Soru sayısı:', len\\(d\\)\\); print\\('Bölümler:', sorted\\(set\\(q.get\\('section',''\\) for q in d\\)\\)[:10]\\); print\\('İlk soru ID:', d[0].get\\('id'\\)\\)\")",
+      "Bash(git commit *)"
     ]
   }
 }
