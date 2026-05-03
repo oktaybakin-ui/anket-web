@@ -74,7 +74,7 @@ const questions = [
   },
   {
     "id": "s6",
-    "text": "S6-Çalıştığınız kurumda re-irradiasyon (re-RT) uygulanıyor mu?",
+    "text": "S6-Çalıştığınız kurumda yeniden ışınlama uygulanıyor mu?",
     "section": "BÖLÜM 1 — Katılımcı ve Kurum Profili",
     "type": "radio",
     "options": [
@@ -85,7 +85,7 @@ const questions = [
   },
   {
     "id": "s7",
-    "text": "S7-Çalıştığınız kurumda yılda yaklaşık kaç hastaya re-RT uygulanmaktadır?",
+    "text": "S7-Çalıştığınız kurumda yılda yaklaşık kaç hastaya yeniden ışınlama uygulanmaktadır?",
     "section": "BÖLÜM 1 — Katılımcı ve Kurum Profili",
     "showIf": {
       "id": "s6",
@@ -102,7 +102,7 @@ const questions = [
   },
   {
     "id": "s8",
-    "text": "S8-Çalıştığınız kurumda yılda yaklaşık kaç pediatrik hastaya re-RT uygulanmaktadır?",
+    "text": "S8-Çalıştığınız kurumda yılda yaklaşık kaç pediatrik hastaya yeniden ışınlama uygulanmaktadır?",
     "section": "BÖLÜM 1 — Katılımcı ve Kurum Profili",
     "showIf": {
       "id": "s6",
@@ -166,7 +166,7 @@ const questions = [
   },
   {
     "id": "s11",
-    "text": "S11-Çalıştığınız kurumda re-RT vakaları ESTRO / EORTC konsensüs tanımlarına göre sınıflandırılıyor mu?\nTip 1: Önceki ve yeni ışınlanan hacimler arasında geometrik örtüşme vardır.\nTip 2: Geometrik örtüşme yoktur; ancak kümülatif doz nedeniyle toksisite endişesi vardır.\nTekrarlayan Organ Işınlaması: Aynı organ yeniden ışınlanır; geometrik örtüşme ve belirgin kümülatif doz/toksisite endişesi yoktur.",
+    "text": "S11-Çalıştığınız kurumda yeniden ışınlama vakaları ESTRO / EORTC konsensüs tanımlarına göre sınıflandırılıyor mu?\nTip 1: Önceki ve yeni ışınlanan hacimler arasında geometrik örtüşme vardır.\nTip 2: Geometrik örtüşme yoktur; ancak kümülatif doz nedeniyle toksisite endişesi vardır.\nTekrarlayan Organ Işınlaması: Aynı organ yeniden ışınlanır; geometrik örtüşme ve belirgin kümülatif doz/toksisite endişesi yoktur.",
     "section": "BÖLÜM 2 — Sınıflandırma ve Kayıt Sistemi",
     "showIf": {
       "id": "s6",
@@ -183,7 +183,7 @@ const questions = [
   },
   {
     "id": "s12",
-    "text": "S12-Kurumunuzda re-RT için yazılı bir klinik protokol / iş akışı var mı?",
+    "text": "S12-Kurumunuzda yeniden ışınlama için yazılı bir klinik protokol / iş akışı var mı?",
     "section": "BÖLÜM 2 — Sınıflandırma ve Kayıt Sistemi",
     "showIf": {
       "id": "s6",
@@ -201,7 +201,7 @@ const questions = [
   },
   {
     "id": "s13",
-    "text": "S13-Re-RT uygulamalarında peer review (meslektaş değerlendirmesi) yapıyor musunuz?",
+    "text": "S13-Yeniden ışınlama uygulamalarında peer review (meslektaş değerlendirmesi) yapıyor musunuz?",
     "section": "BÖLÜM 2 — Sınıflandırma ve Kayıt Sistemi",
     "showIf": {
       "id": "s6",
@@ -218,7 +218,7 @@ const questions = [
   },
   {
     "id": "s14",
-    "text": "S14-Re-RT iş akışı ve kararlarını ayrıca dokümante ediyor musunuz?",
+    "text": "S14-Yeniden ışınlama iş akışı ve kararlarını ayrıca dokümante ediyor musunuz?",
     "section": "BÖLÜM 2 — Sınıflandırma ve Kayıt Sistemi",
     "showIf": {
       "id": "s6",
@@ -229,8 +229,8 @@ const questions = [
       "Evet, hasta dosyasında fiziksel (hard copy) olarak kaydediyorum",
       "Evet, tedavi planlama sistemi içinde dijital olarak kaydediyorum",
       "Evet, hastane bilgi sistemi (HBS) / elektronik hasta kaydında belgeliyorum",
-      "Evet, kuruma özgü re-RT formu / şablonu kullanıyorum",
-      "Hayır, rutin klinik kayıtların dışında ayrıca re-RT özelinde ayrıca bir dokümantasyon yapmıyorum"
+      "Evet, kuruma özgü yeniden ışınlama formu / şablonu kullanıyorum",
+      "Hayır, rutin klinik kayıtların dışında ayrıca yeniden ışınlama özelinde ayrıca bir dokümantasyon yapmıyorum"
     ],
     "hasOther": true,
     "required": true
@@ -255,7 +255,7 @@ const questions = [
   },
   {
     "id": "s16",
-    "text": "S16- Re-RT planlama öncesinde hastanın önceki radyoterapiye ait planlama verilerine genellikle hangi düzeyde erişebiliyorsunuz?",
+    "text": "S16- Yeniden ışınlama planlama öncesinde hastanın önceki radyoterapiye ait planlama verilerine genellikle hangi düzeyde erişebiliyorsunuz?",
     "section": "BÖLÜM 3 — Veri Erişimi ve Kalitesi",
     "showIf": {
       "id": "s6",
@@ -273,7 +273,7 @@ const questions = [
   },
   {
     "id": "s17",
-    "text": "S17- Re-RT kararı verirken aşağıda belirtilen ilk tedavi verilerinin önemini değerlendiriniz.",
+    "text": "S17- Yeniden ışınlama kararı verirken aşağıda belirtilen ilk tedavi verilerinin önemini değerlendiriniz.",
     "section": "BÖLÜM 3 — Veri Erişimi ve Kalitesi",
     "showIf": {
       "id": "s6",
@@ -292,7 +292,7 @@ const questions = [
       "Akut toksisite bilgisi",
       "Geç toksisite bilgisi",
       "Tedaviye yanıt bilgisi (lokal kontrol)",
-      "Önceki tedavi ile re-RT arasında geçen süre"
+      "Önceki tedavi ile yeniden ışınlama arasında geçen süre"
     ],
     "columns": [
       "1",
@@ -380,14 +380,14 @@ const questions = [
       "Literatür bazlı maksimum doz aldığı varsayımını kullanıyoruz",
       "Kümülatif doz hesabı yapılamadığında standart OAR doz kısıtlarını referans alıyoruz",
       "Temsili (replica) plan oluşturmayı değerlendiriyoruz",
-      "Bu durumda hastayı re-RT uygulamasına uygun bulmuyoruz"
+      "Bu durumda hastayı yeniden ışınlama uygulamasına uygun bulmuyoruz"
     ],
     "hasOther": true,
     "required": true
   },
   {
     "id": "s22",
-    "text": "S22-Re-RT planlamasında, BT simülasyona ek olarak, hangi görüntüleme modalitelerini kullanıyorsunuz?",
+    "text": "S22-Yeniden ışınlama planlamasında, BT simülasyona ek olarak, hangi görüntüleme modalitelerini kullanıyorsunuz?",
     "section": "BÖLÜM 4 — Simülasyon, Görüntüleme ve Pozisyonlama",
     "showIf": {
       "id": "s6",
@@ -423,7 +423,7 @@ const questions = [
   },
   {
     "id": "s24",
-    "text": "S24-Re-RT simülasyonunda solunum / hareket yönetimi uyguluyor musunuz?",
+    "text": "S24-Yeniden ışınlama simülasyonunda solunum / hareket yönetimi uyguluyor musunuz?",
     "section": "BÖLÜM 4 — Simülasyon, Görüntüleme ve Pozisyonlama",
     "showIf": {
       "id": "s6",
@@ -440,7 +440,7 @@ const questions = [
   },
   {
     "id": "s25",
-    "text": "S25-Önceki tedavide kullanılan hedef hacimler ve konturlar re-RT planlamasında nasıl kullanılıyor?",
+    "text": "S25-Önceki tedavide kullanılan hedef hacimler ve konturlar yeniden ışınlama planlamasında nasıl kullanılıyor?",
     "section": "BÖLÜM 4 — Simülasyon, Görüntüleme ve Pozisyonlama",
     "showIf": {
       "id": "s6",
@@ -458,7 +458,7 @@ const questions = [
   },
   {
     "id": "s26",
-    "text": "S26-Kurumunuzda Re-RT uyguladığınız anatomik bölgeler hangileridir?",
+    "text": "S26-Kurumunuzda Yeniden ışınlama uyguladığınız anatomik bölgeler hangileridir?",
     "section": "BÖLÜM 5 — Planlama ve Dozimetrik Değerlendirme",
     "showIf": {
       "id": "s6",
@@ -482,7 +482,7 @@ const questions = [
   },
   {
     "id": "s27",
-    "text": "S27-Kurumunuzda re-RT uygulamalarında Radyasyon Onkolojisi Uzmanı – Medikal Fizik Uzmanı iletişimi hangi aşamada başlamaktadır?",
+    "text": "S27-Kurumunuzda yeniden ışınlama uygulamalarında Radyasyon Onkolojisi Uzmanı – Medikal Fizik Uzmanı iletişimi hangi aşamada başlamaktadır?",
     "section": "BÖLÜM 5 — Planlama ve Dozimetrik Değerlendirme",
     "showIf": {
       "id": "s6",
@@ -502,7 +502,7 @@ const questions = [
   },
   {
     "id": "s28",
-    "text": "S28-Re-RT planlamasında hangi tedavi modalitelerini kullanıyorsunuz?",
+    "text": "S28-Yeniden ışınlama planlamasında hangi tedavi modalitelerini kullanıyorsunuz?",
     "section": "BÖLÜM 5 — Planlama ve Dozimetrik Değerlendirme",
     "showIf": {
       "id": "s6",
@@ -522,7 +522,7 @@ const questions = [
   },
   {
     "id": "s29",
-    "text": "S29-Re-RT planlamasında önceki tedaviye ait görüntüleri mevcut görüntülerle füzyon yapıyor musunuz?",
+    "text": "S29-Yeniden ışınlama planlamasında önceki tedaviye ait görüntüleri mevcut görüntülerle füzyon yapıyor musunuz?",
     "section": "BÖLÜM 5 — Planlama ve Dozimetrik Değerlendirme",
     "showIf": {
       "id": "s6",
@@ -566,7 +566,7 @@ const questions = [
   },
   {
     "id": "s31",
-    "text": "S31-Kümülatif doz değerlendirmesi re-RT kararında zorunlu olmalıdır.",
+    "text": "S31-Kümülatif doz değerlendirmesi yeniden ışınlama kararında zorunlu olmalıdır.",
     "section": "BÖLÜM 5 — Planlama ve Dozimetrik Değerlendirme",
     "showIf": {
       "id": "s6",
@@ -669,7 +669,7 @@ const questions = [
       "Literatürde bildirilen organ doz kısıtlarını referans alıyoruz",
       "Daha konservatif / düşük doz kısıtları uyguluyoruz",
       "EQD2 / BED dönüşümü ile yaklaşık kümülatif doz tahmini yapıyoruz",
-      "Klinik risk yüksek görülürse re-RT kaçınıyoruz",
+      "Klinik risk yüksek görülürse yeniden ışınlama kaçınıyoruz",
       "Bu durumda standart bir yaklaşımımız yok; vaka bazlı karar veriyoruz"
     ],
     "hasOther": true,
@@ -677,7 +677,7 @@ const questions = [
   },
   {
     "id": "s37",
-    "text": "S37-Kurumunuzda re-RT uygulamasına özel bir kontrol listesi (checklist) var mı?",
+    "text": "S37-Kurumunuzda yeniden ışınlama uygulamasına özel bir kontrol listesi (checklist) var mı?",
     "section": "BÖLÜM 5 — Planlama ve Dozimetrik Değerlendirme",
     "showIf": {
       "id": "s6",
@@ -692,7 +692,7 @@ const questions = [
   },
   {
     "id": "s38",
-    "text": "S38-Re-RT vakaları sistematik veri tabanına kaydediliyor mu?",
+    "text": "S38-Yeniden ışınlama vakaları sistematik veri tabanına kaydediliyor mu?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
       "id": "s6",
@@ -709,7 +709,7 @@ const questions = [
   },
   {
     "id": "s39",
-    "text": "S39-Re-RT raporlamasında aşağıdakilerden hangilerinin rutin olarak yer alması gerektiğini düşünüyorsunuz?",
+    "text": "S39-Yeniden ışınlama raporlamasında aşağıdakilerden hangilerinin rutin olarak yer alması gerektiğini düşünüyorsunuz?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
       "id": "s6",
@@ -718,8 +718,8 @@ const questions = [
     "type": "checkbox",
     "options": [
       "Önceki radyoterapi dozu ve fraksiyonasyonu",
-      "Önceki radyoterapi ile re-RT arasındaki süre",
-      "Re-RT tipi: Tip 1 / Tip 2 / tekrarlayan organ ışınlaması",
+      "Önceki radyoterapi ile yeniden ışınlama arasındaki süre",
+      "Yeniden ışınlama tipi: Tip 1 / Tip 2 / tekrarlayan organ ışınlaması",
       "Kümülatif kritik organ dozları",
       "Doz birleştirme / doz akümülasyonu yöntemi",
       "Biyolojik doz dönüşümünde kullanılan α/β değeri",
@@ -735,7 +735,7 @@ const questions = [
   },
   {
     "id": "s40",
-    "text": "S40-Re-RT planlaması ve uygulamasına yönelik aldığınız eğitimi yeterli buluyor musunuz?",
+    "text": "S40-Yeniden ışınlama planlaması ve uygulamasına yönelik aldığınız eğitimi yeterli buluyor musunuz?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
       "id": "s6",
@@ -753,7 +753,7 @@ const questions = [
   },
   {
     "id": "s41",
-    "text": "S41-Re-RT konusunda klinik yeterliliğinizi ne düzeyde değerlendiriyorsunuz?",
+    "text": "S41-Yeniden ışınlama konusunda klinik yeterliliğinizi ne düzeyde değerlendiriyorsunuz?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
       "id": "s6",
@@ -771,7 +771,7 @@ const questions = [
   },
   {
     "id": "s42",
-    "text": "S42-Re-RT için ulusal bir protokol/kılavuz oluşturulmasına ihtiyaç olduğunu düşünüyor musunuz?",
+    "text": "S42-Yeniden ışınlama için ulusal bir protokol/kılavuz oluşturulmasına ihtiyaç olduğunu düşünüyor musunuz?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
       "id": "s6",
@@ -783,13 +783,13 @@ const questions = [
       "Evet, faydalı olur ancak zorunlu değil",
       "Kararsızım / fikrim yok",
       "Hayır, mevcut uluslararası kılavuzlar yeterli",
-      "Hayır, re-RT çoğunlukla vaka bazlı değerlendirilmelidir"
+      "Hayır, yeniden ışınlama çoğunlukla vaka bazlı değerlendirilmelidir"
     ],
     "required": true
   },
   {
     "id": "s43",
-    "text": "S43-Re-RT kararında sizce en önemli standartlaştırılması gereken alanlar hangileridir?",
+    "text": "S43-Yeniden ışınlama kararında sizce en önemli standartlaştırılması gereken alanlar hangileridir?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
       "id": "s6",
@@ -798,11 +798,11 @@ const questions = [
     "type": "checkbox",
     "options": [
       "Hasta seçimi kriterleri",
-      "Re-RT endikasyonları",
+      "Yeniden ışınlama endikasyonları",
       "Normal doku / OAR doz limitleri",
       "Kümülatif doz hesaplama ve doz akümülasyonu yöntemi",
       "Görüntü eşleştirme standardı: rijit ve/veya deformable image registration",
-      "Re-RT sınıflaması: Tip 1 / Tip 2 / tekrarlayan organ ışınlaması",
+      "Yeniden ışınlama sınıflaması: Tip 1 / Tip 2 / tekrarlayan organ ışınlaması",
       "Biyolojik doz hesaplama yöntemleri: EQD2 / BED",
       "Doku iyileşmesi / recovery faktörü kullanımı",
       "Toksisite değerlendirme ve sınıflaması",
@@ -814,7 +814,7 @@ const questions = [
   },
   {
     "id": "s44",
-    "text": "S44-Ulusal re-RT protokolü oluşturulmasının önündeki engeller sizce nelerdir?",
+    "text": "S44-Ulusal yeniden ışınlama protokolü oluşturulmasının önündeki engeller sizce nelerdir?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
       "id": "s6",
@@ -837,7 +837,7 @@ const questions = [
   },
   {
     "id": "s45",
-    "text": "S45-Ulusal re-RT kılavuzunun hazırlanmasında hangi yaklaşımların kullanılmasını uygun bulursunuz?",
+    "text": "S45-Ulusal yeniden ışınlama kılavuzunun hazırlanmasında hangi yaklaşımların kullanılmasını uygun bulursunuz?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
       "id": "s6",
@@ -850,14 +850,14 @@ const questions = [
       "Sistematik literatür derlemesi yapılması",
       "Çok merkezli ulusal retrospektif veri analizi yapılması",
       "Uluslararası kılavuzların ulusal koşullara uyarlanması",
-      "Ulusal re-RT olgu veri tabanının oluşturulması"
+      "Ulusal yeniden ışınlama olgu veri tabanının oluşturulması"
     ],
     "hasOther": true,
     "required": true
   },
   {
     "id": "s46",
-    "text": "S46-Türkiye’de re-RT konusunda planlanacak çok merkezli prospektif bir çalışmaya katılmak ister misiniz?",
+    "text": "S46-Türkiye’de yeniden ışınlama konusunda planlanacak çok merkezli prospektif bir çalışmaya katılmak ister misiniz?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
       "id": "s6",
@@ -873,7 +873,7 @@ const questions = [
   },
   {
     "id": "s47",
-    "text": "S47-Re-RT pratiğinizde altyapı açısından en önemli eksiklikler nelerdir?",
+    "text": "S47-Yeniden ışınlama pratiğinizde altyapı açısından en önemli eksiklikler nelerdir?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
       "id": "s6",
@@ -881,17 +881,17 @@ const questions = [
     },
     "type": "checkbox",
     "options": [
-      "Re-RT konusunda klinik deneyim ve eğitim ihtiyacı",
-      "Re-RT planlamasında medikal fizik desteği için ayrılabilecek zaman ve kaynakların sınırlı olması",
+      "Yeniden ışınlama konusunda klinik deneyim ve eğitim ihtiyacı",
+      "Yeniden ışınlama planlamasında medikal fizik desteği için ayrılabilecek zaman ve kaynakların sınırlı olması",
       "Multidisipliner değerlendirme ve ekip iş akışının standart olmaması",
-      "Re-RT özgü kurumsal protokol / kontrol listesi eksikliği",
+      "Yeniden ışınlama özgü kurumsal protokol / kontrol listesi eksikliği",
       "Önceki radyoterapi verilerine erişim ve veri aktarım süreçlerindeki güçlükler",
       "Kurumlar arası veri paylaşım altyapısının olmaması",
       "Kritik organ doz sınırlarının bilinmemesi",
       "Kümülatif doz hesaplama / doz akümülasyonu aracının olmaması",
       "Doz haritalama / dose mapping yazılımının olmaması",
       "Deformable image registration (DIR) yazılımının olmaması",
-      "Tedavi planlama sisteminde re-RT değerlendirmesine yönelik araçların sınırlı olması",
+      "Tedavi planlama sisteminde yeniden ışınlama değerlendirmesine yönelik araçların sınırlı olması",
       "Stereotaktik tedavi altyapısının sınırlı olması",
       "Görüntü kılavuzlu radyoterapi / IGRT kapasitesinin sınırlı olması",
       "Yüzey kılavuzlu radyoterapi (SGRT) eksikliği",
@@ -911,9 +911,9 @@ const questions = [
     },
     "type": "checkbox",
     "options": [
-      "Ulusal re-RT kılavuzu oluşturulması",
+      "Ulusal yeniden ışınlama kılavuzu oluşturulması",
       "Eğitim / kurs / sertifikasyon programları düzenlenmesi",
-      "Ulusal re-RT kayıt sistemi / registry kurulması",
+      "Ulusal yeniden ışınlama kayıt sistemi / registry kurulması",
       "Kurumlar arası veri paylaşım süreçlerinin standartlaştırılması",
       "Teknik standartların belirlenmesi: DIR, doz akümülasyonu vb.",
       "Multidisipliner konsensüs toplantıları düzenlenmesi",
@@ -940,7 +940,7 @@ const questions = [
   },
   {
     "id": "s50",
-    "text": "S50-Kurumunuzda re-RT kararı genellikle nasıl verilmektedir?",
+    "text": "S50-Kurumunuzda yeniden ışınlama kararı genellikle nasıl verilmektedir?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
       "allOf": [
@@ -967,7 +967,7 @@ const questions = [
   },
   {
     "id": "s51",
-    "text": "S51-Re-RT uygulamalarınızın temel amacı genellikle nedir?",
+    "text": "S51-Yeniden ışınlama uygulamalarınızın temel amacı genellikle nedir?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
       "allOf": [
@@ -992,7 +992,7 @@ const questions = [
   },
   {
     "id": "s52",
-    "text": "S52-Küratif / radikal amaçlı re-RT kararı verirken, önceki radyoterapi ile yeni radyoterapi arasındaki süre için kabul ettiğiniz minimum bir eşik var mı?",
+    "text": "S52-Küratif / radikal amaçlı yeniden ışınlama kararı verirken, önceki radyoterapi ile yeni radyoterapi arasındaki süre için kabul ettiğiniz minimum bir eşik var mı?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
       "allOf": [
@@ -1018,7 +1018,7 @@ const questions = [
   },
   {
     "id": "s53",
-    "text": "S53-Palyatif amaçlı re-RT kararı verirken, önceki radyoterapi ile yeni radyoterapi arasındaki süre için kabul ettiğiniz minimum bir eşik var mı?",
+    "text": "S53-Palyatif amaçlı yeniden ışınlama kararı verirken, önceki radyoterapi ile yeni radyoterapi arasındaki süre için kabul ettiğiniz minimum bir eşik var mı?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
       "allOf": [
@@ -1044,7 +1044,7 @@ const questions = [
   },
   {
     "id": "s54",
-    "text": "S54-Küratif / radikal amaçlı re-RT uygulamaktan kaçınmanıza neden olan durumlar nelerdir?\n(Birden fazla seçenek işaretlenebilir)",
+    "text": "S54-Küratif / radikal amaçlı yeniden ışınlama uygulamaktan kaçınmanıza neden olan durumlar nelerdir?\n(Birden fazla seçenek işaretlenebilir)",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
       "allOf": [
@@ -1071,7 +1071,7 @@ const questions = [
       "Kritik yapılara önceki tedavide yüksek doz verilmiş olması",
       "Kümülatif dozun güvenli kabul edilen sınırları aşması",
       "Yaygın veya kontrolsüz metastatik hastalık",
-      "Re-RT alanında aktif enfeksiyon, ülserasyon veya fistül varlığı",
+      "Yeniden ışınlama alanında aktif enfeksiyon, ülserasyon veya fistül varlığı",
       "Hedef volümün güvenli tedaviyi engelleyecek kadar büyük olması"
     ],
     "hasOther": true,
@@ -1079,7 +1079,7 @@ const questions = [
   },
   {
     "id": "s55",
-    "text": "S55-Palyatif amaçlı re-RT uygulamaktan kaçınmanıza neden olan durumlar nelerdir?\n(Birden fazla seçenek işaretlenebilir)",
+    "text": "S55-Palyatif amaçlı yeniden ışınlama uygulamaktan kaçınmanıza neden olan durumlar nelerdir?\n(Birden fazla seçenek işaretlenebilir)",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
       "allOf": [
@@ -1106,7 +1106,7 @@ const questions = [
       "Kritik yapılara önceki tedavide yüksek doz verilmiş olması",
       "Kümülatif dozun güvenli kabul edilen sınırları aşması",
       "Yaygın veya kontrolsüz metastatik hastalık",
-      "Re-RT alanında aktif enfeksiyon, ülserasyon veya fistül varlığı",
+      "Yeniden ışınlama alanında aktif enfeksiyon, ülserasyon veya fistül varlığı",
       "Hedef volümün güvenli tedaviyi engelleyecek kadar büyük olması"
     ],
     "hasOther": true,
@@ -1114,7 +1114,7 @@ const questions = [
   },
   {
     "id": "s56",
-    "text": "S56-Re-RT endikasyonu kararınızı etkileyen en önemli faktörler nelerdir?\nEn fazla 3 seçenek işaretleyiniz.",
+    "text": "S56-Yeniden ışınlama endikasyonu kararınızı etkileyen en önemli faktörler nelerdir?\nEn fazla 3 seçenek işaretleyiniz.",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
       "allOf": [
@@ -1136,7 +1136,7 @@ const questions = [
       "Önceki radyoterapiye yanıt / lokal kontrol süresi",
       "Önceki radyoterapi dozu, fraksiyonasyonu ve uygulanan teknik",
       "Önceki tedavide gelişen akut veya geç toksisite",
-      "Önceki radyoterapi ile re-RT arasındaki interval süre",
+      "Önceki radyoterapi ile yeniden ışınlama arasındaki interval süre",
       "Eş zamanlı veya planlanan sistemik tedavi (kemoterapi, immunoterapi vb.)",
       "Hastanın performans durumu",
       "Komorbiditeler / frajilite",
@@ -1148,7 +1148,7 @@ const questions = [
   },
   {
     "id": "s57",
-    "text": "S57-Re-RT doz /fraksiyonasyon şeması kararınızı etkileyen en önemli faktörler nelerdir?\nEn fazla 3 seçenek işaretleyiniz.",
+    "text": "S57-Yeniden ışınlama doz /fraksiyonasyon şeması kararınızı etkileyen en önemli faktörler nelerdir?\nEn fazla 3 seçenek işaretleyiniz.",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
       "allOf": [
@@ -1170,7 +1170,7 @@ const questions = [
       "Önceki radyoterapiye yanıt / lokal kontrol süresi",
       "Önceki radyoterapi dozu, fraksiyonasyonu ve uygulanan teknik",
       "Önceki tedavide gelişen akut veya geç toksisite",
-      "Önceki radyoterapi ile re-RT arasındaki interval süre",
+      "Önceki radyoterapi ile yeniden ışınlama arasındaki interval süre",
       "Eş zamanlı veya planlanan sistemik tedavi (kemoterapi, immunoterapi vb.)",
       "Hastanın performans durumu",
       "Komorbiditeler / frajilite",
@@ -1182,7 +1182,7 @@ const questions = [
   },
   {
     "id": "6a",
-    "text": "6a-Re-RT uygulanmamasının nedenleri nelerdir?",
+    "text": "6a-Yeniden ışınlama uygulanmamasının nedenleri nelerdir?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
       "id": "s6",
@@ -1204,7 +1204,7 @@ const questions = [
   },
   {
     "id": "6b",
-    "text": "6b-Re-RT uygulamalarının güvenli ve etkin biçimde yürütülebilmesi için öncelikli olarak neye ihtiyaç duyuyorsunuz?",
+    "text": "6b-Yeniden ışınlama uygulamalarının güvenli ve etkin biçimde yürütülebilmesi için öncelikli olarak neye ihtiyaç duyuyorsunuz?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
       "id": "s6",
@@ -1224,7 +1224,7 @@ const questions = [
   },
   {
     "id": "6c",
-    "text": "6c-Re-RT konusunda düzenlenecek ulusal / uluslararası eğitim veya kurslara katılmak ister misiniz?",
+    "text": "6c-Yeniden ışınlama konusunda düzenlenecek ulusal / uluslararası eğitim veya kurslara katılmak ister misiniz?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
       "id": "s6",
@@ -1240,7 +1240,7 @@ const questions = [
   },
   {
     "id": "6d",
-    "text": "6d-Ulusal bir re-RT kılavuzu / protokolü olması, re-RT uygulama eğiliminizi artırır mıydı?",
+    "text": "6d-Ulusal bir yeniden ışınlama kılavuzu / protokolü olması, yeniden ışınlama uygulama eğiliminizi artırır mıydı?",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
       "id": "s6",
@@ -1257,7 +1257,7 @@ const questions = [
   },
   {
     "id": "6e",
-    "text": "6e-Re-RT konusunda kendinizi ne kadar bilgili hissediyorsunuz?\n1- Hiç bilgi sahibi değilim\n2- Sınırlı düzeyde bilgi sahibiyim\n3- Orta düzeyde bilgi sahibiyim\n4- İyi düzeyde bilgi sahibiyim\n5- Çok iyi düzeyde bilgi sahibiyim",
+    "text": "6e-Yeniden ışınlama konusunda kendinizi ne kadar bilgili hissediyorsunuz?\n1- Hiç bilgi sahibi değilim\n2- Sınırlı düzeyde bilgi sahibiyim\n3- Orta düzeyde bilgi sahibiyim\n4- İyi düzeyde bilgi sahibiyim\n5- Çok iyi düzeyde bilgi sahibiyim",
     "section": "BÖLÜM 6 —Takip ve Raporlama",
     "showIf": {
       "id": "s6",

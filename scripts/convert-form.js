@@ -31,7 +31,13 @@ function cleanTitle(t) {
   let v = t;
   v = v.replace(/^BÖLÜM\s+\d+[^\n]*\n+/i, "");
   v = v.replace(/^GRUP\s+\d+[^\n]*\n+/i, "");
-  // S1- veya S1 - öneklerini koru ama bölüm açıklamasını temizle
+  // "re-RT" ve "re-irradiasyon" ifadelerini "yeniden ışınlama" ile değiştir
+  v = v.replace(/re-RT \(yeniden ışınlama\)/g, "yeniden ışınlama");
+  v = v.replace(/re-irradiasyon \(yeniden ışınlama\)/g, "yeniden ışınlama");
+  v = v.replace(/Re-RT/g, "Yeniden ışınlama");
+  v = v.replace(/re-RT/g, "yeniden ışınlama");
+  v = v.replace(/Re-irradiasyon/g, "Yeniden ışınlama");
+  v = v.replace(/re-irradiasyon/g, "yeniden ışınlama");
   v = v.replace(/\n\s*\n/g, "\n").trim();
   return v;
 }
