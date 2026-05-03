@@ -79,13 +79,17 @@ function renderQuestion(q) {
       tr.appendChild(el("th", { class: "grid-row-label", scope: "row" }, row));
       (q.columns || []).forEach((col) => {
         const td = el("td", { "data-col": col });
+        // Tıklanabilir alan: input + sayı tek bir <label> içinde
+        const lbl = el("label", { class: "grid-cell" });
         const inp = el("input", {
           type: "radio",
           name: `${q.id}::${row}`,
           value: col,
           "aria-label": `${row}: ${col}`
         });
-        td.appendChild(inp);
+        lbl.appendChild(inp);
+        lbl.appendChild(el("span", { class: "grid-cell-num" }, col));
+        td.appendChild(lbl);
         tr.appendChild(td);
       });
       tbody.appendChild(tr);
