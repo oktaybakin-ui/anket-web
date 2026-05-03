@@ -531,7 +531,10 @@ main { position: relative; z-index: 1; }
   font-size: 13.5px;
   line-height: 1.4;
   max-width: 280px;
+  text-transform: none;
+  letter-spacing: 0;
 }
+.grid-table thead th { text-transform: none; letter-spacing: 0; }
 .grid-table tbody td {
   padding: 8px 6px;
   text-align: center;
