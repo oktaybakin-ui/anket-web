@@ -587,9 +587,14 @@ main { position: relative; z-index: 1; }
 label { display: block; font-size: 14px; color: var(--text-2); font-weight: 500; }
 
 input[type="text"],
+input[type="email"],
 input[type="password"],
+input[type="tel"],
+input[type="url"],
+input[type="number"],
 textarea {
   width: 100%;
+  box-sizing: border-box;
   padding: 12px 14px;
   margin-top: 6px;
   border: 1.5px solid var(--border-strong);
@@ -601,10 +606,18 @@ textarea {
   transition: border-color 0.15s, box-shadow 0.15s;
 }
 input[type="text"]:hover,
+input[type="email"]:hover,
 input[type="password"]:hover,
+input[type="tel"]:hover,
+input[type="url"]:hover,
+input[type="number"]:hover,
 textarea:hover { border-color: #94a3b8; }
 input[type="text"]:focus,
+input[type="email"]:focus,
 input[type="password"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+input[type="number"]:focus,
 textarea:focus {
   outline: none;
   border-color: var(--primary);
