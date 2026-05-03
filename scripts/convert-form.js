@@ -31,13 +31,10 @@ function cleanTitle(t) {
   let v = t;
   v = v.replace(/^BÖLÜM\s+\d+[^\n]*\n+/i, "");
   v = v.replace(/^GRUP\s+\d+[^\n]*\n+/i, "");
-  // "re-RT" ve "re-irradiasyon" ifadelerini "yeniden ışınlama" ile değiştir
-  v = v.replace(/re-RT \(yeniden ışınlama\)/g, "yeniden ışınlama");
-  v = v.replace(/re-irradiasyon \(yeniden ışınlama\)/g, "yeniden ışınlama");
-  v = v.replace(/Re-RT/g, "Yeniden ışınlama");
-  v = v.replace(/re-RT/g, "yeniden ışınlama");
-  v = v.replace(/Re-irradiasyon/g, "Yeniden ışınlama");
-  v = v.replace(/re-irradiasyon/g, "yeniden ışınlama");
+  // "re-irradiasyon (yeniden ışınlama)" ifadesini "re-RT" ile sadeleştir
+  v = v.replace(/re-irradiasyon \(yeniden ışınlama\)/gi, "re-RT");
+  v = v.replace(/Re-irradiasyon/g, "Re-RT");
+  v = v.replace(/re-irradiasyon/g, "re-RT");
   v = v.replace(/\n\s*\n/g, "\n").trim();
   return v;
 }
