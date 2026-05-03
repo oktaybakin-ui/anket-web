@@ -580,15 +580,8 @@ main { position: relative; z-index: 1; }
   grid-template-columns: repeat(3, 1fr);
   gap: 14px;
 }
-.row.identity-row {
-  grid-template-columns: 1fr 1fr;
-}
-.row.identity-row .full-row {
-  grid-column: 1 / -1;
-}
 @media (max-width: 720px) {
   .row { grid-template-columns: 1fr; }
-  .row.identity-row { grid-template-columns: 1fr; }
 }
 
 label { display: block; font-size: 14px; color: var(--text-2); font-weight: 500; }
