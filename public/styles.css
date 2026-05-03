@@ -567,7 +567,7 @@ main { position: relative; z-index: 1; }
 .grid-table .grid-cell-num { display: none; }
 
 @media (max-width: 640px) {
-  /* Mobilde: her satır kendi soru bloğu, 5 şık altta dikey kartlar */
+  /* Mobilde: her satır kendi soru bloğu; 5 şık tek satırda kompakt mini kartlar */
   .grid-table {
     display: block;
     border: none;
@@ -579,12 +579,17 @@ main { position: relative; z-index: 1; }
   }
   .grid-table thead { display: none; }
   .grid-table tbody { display: block; }
+
+  /* tr = grid: label tüm genişlikte üstte, altta 5 eşit kompakt sütun */
   .grid-table tbody tr {
-    display: block;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-column-gap: 6px;
+    grid-row-gap: 0;
     background: transparent;
     border: none;
     padding: 0;
-    margin: 0 0 22px;
+    margin: 0 0 18px;
   }
   .grid-table tbody tr:last-child { margin-bottom: 0; }
   .grid-table tbody tr:nth-child(even) td,
@@ -592,8 +597,9 @@ main { position: relative; z-index: 1; }
   .grid-table tbody tr:hover td,
   .grid-table tbody tr:hover th { background: transparent; }
 
-  /* Satır başlığı bir alt-soru gibi */
+  /* Satır başlığı tüm 5 sütunu kaplasın */
   .grid-table .grid-row-label {
+    grid-column: 1 / -1;
     display: block;
     padding: 0 0 10px;
     border: none;
@@ -609,32 +615,34 @@ main { position: relative; z-index: 1; }
     letter-spacing: 0;
   }
 
-  /* td artık tek bir kart şıkkı */
+  /* td auto-place into 5 columns */
   .grid-table tbody td {
     display: block;
     padding: 0;
-    margin: 0 0 8px;
+    margin: 0;
     border: none;
     background: transparent;
-    text-align: left;
+    text-align: center;
   }
 
-  /* grid-cell label = tıklanabilir kart şıkkı (diğer .options label gibi) */
+  /* grid-cell = kompakt mini kart: sayı üstte, radyo altta, ortalı */
   .grid-table .grid-cell {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 12px;
+    justify-content: center;
+    gap: 4px;
     width: 100%;
-    padding: 12px 14px;
+    padding: 8px 4px;
     border: 1.5px solid var(--border-strong);
-    border-radius: 12px;
+    border-radius: 10px;
     background: #fff;
     cursor: pointer;
-    font-size: 14.5px;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--text-2);
     transition: all 0.15s ease;
     box-sizing: border-box;
+    min-height: 56px;
   }
   .grid-table .grid-cell:hover {
     border-color: var(--primary);
@@ -647,9 +655,10 @@ main { position: relative; z-index: 1; }
     box-shadow: 0 0 0 3px rgba(11, 110, 153, 0.12);
   }
   .grid-table .grid-cell-num {
-    display: inline-block;
-    font-size: 14.5px;
-    font-weight: 600;
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
   }
   .grid-table input[type="radio"] {
     appearance: none;
