@@ -53,7 +53,24 @@
       "Bash(node -c utils/mail.js)",
       "Bash(git add *)",
       "Bash(git commit -m 'Track all started attempts; admin status filter; email on completion *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(git config *)",
+      "Bash(security find-internet-password *)",
+      "Bash(gh --version)",
+      "Bash(curl -sSL https://anket-web.vercel.app/admin/admin.js)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://anket-web.vercel.app/api/questions)",
+      "Bash(curl -s -X POST https://api.resend.com/emails -H 'Authorization: Bearer re_QUgBuh7U_JndPp1PqJLxq3Y3y5LmzQvuJ' -H 'Content-Type: application/json' -d '{ *)",
+      "WebFetch(domain:forms.gle)",
+      "WebFetch(domain:docs.google.com)",
+      "Bash(curl -sSL \"https://docs.google.com/forms/d/e/1FAIpQLSfZt1YcimxxKKVIIQTrMOuFW7TxFVJH4wsEudM65j_BImYegA/viewform\")",
+      "Bash(curl -sSL https://docs.google.com/forms/d/e/1FAIpQLSfZt1YcimxxKKVIIQTrMOuFW7TxFVJH4wsEudM65j_BImYegA/viewform -o /tmp/form.html)",
+      "Read(//tmp/**)",
+      "Bash(node scripts/convert-form.js)",
+      "Bash(node -e \"const {questions} = require\\('./questions'\\); console.log\\('Soru sayısı:', questions.length\\); console.log\\('Tipler:', [...new Set\\(questions.map\\(q=>q.type\\)\\)]\\); console.log\\('Dallanan:', questions.filter\\(q=>q.showIf\\).length\\); console.log\\('Bölümler:', [...new Set\\(questions.map\\(q=>q.section\\).filter\\(Boolean\\)\\)]\\);\")",
+      "Bash(node -c questions.js)",
+      "Bash(node -c utils/contact.js)",
+      "Bash(node -e \"const {questions, isQuestionVisible} = require\\('./questions'\\); console.log\\('OK soru:', questions.length, 'showIf:', questions.filter\\(q=>q.showIf\\).length\\)\")",
+      "Bash(git commit -m 'Replace TC with email; switch to Google Form survey with branching + grid *)"
     ]
   }
 }

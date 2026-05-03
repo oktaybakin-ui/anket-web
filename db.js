@@ -15,31 +15,28 @@ const supabase = createClient(SUPABASE_URL || "", SUPABASE_SERVICE_KEY || "", {
 
 const TABLE = "responses";
 const SELECT_COLS =
-  "id, ad, soyad, tc_masked, answers, started_at, completed_at, created_at";
+  "id, ad, soyad, email, answers, started_at, completed_at, created_at";
 
-async function findByTCHash(tcHash) {
+async function findByEmail(email) {
   const { data, error } = await supabase
     .from(TABLE)
     .select("id, completed_at")
-    .eq("tc_hash", tcHash)
+    .ilike("email", email)
     .maybeSingle();
   if (error) throw error;
   return data;
 }
 
-// "Ankete Başla"ya basınca: kullanıcıyı yarı kalmış olarak kaydet
-// (varsa dokunma, yoksa yeni satır)
-async function startAttempt({ ad, soyad, tcHash, tcMasked }) {
-  const existing = await findByTCHash(tcHash);
-  if (existing) return existing; // zaten başlamış (veya tamamlamış)
+async function startAttempt({ ad, soyad, email }) {
+  const existing = await findByEmail(email);
+  if (existing) return existing;
 
   const { data, error } = await supabase
     .from(TABLE)
     .insert({
       ad,
       soyad,
-      tc_hash: tcHash,
-      tc_masked: tcMasked,
+      email,
       answers: {},
       started_at: new Date().toISOString(),
       completed_at: null
@@ -50,11 +47,10 @@ async function startAttempt({ ad, soyad, tcHash, tcMasked }) {
   return data;
 }
 
-// "Anketi Gönder"e basınca: yarım kalan satırı tamamla; yoksa yeni ekle
-async function completeResponse({ ad, soyad, tcHash, tcMasked, answers }) {
-  const existing = await findByTCHash(tcHash);
+async function completeResponse({ ad, soyad, email, answers }) {
+  const existing = await findByEmail(email);
   if (existing && existing.completed_at) {
-    const err = new Error("Bu TC ile daha önce anket doldurulmuş.");
+    const err = new Error("Bu e-posta ile daha önce anket doldurulmuş.");
     err.code = "ALREADY_COMPLETED";
     throw err;
   }
@@ -62,21 +58,19 @@ async function completeResponse({ ad, soyad, tcHash, tcMasked, answers }) {
   if (existing) {
     const { data, error } = await supabase
       .from(TABLE)
-      .update({ ad, soyad, tc_masked: tcMasked, answers, completed_at: completedAt })
+      .update({ ad, soyad, answers, completed_at: completedAt })
       .eq("id", existing.id)
       .select("id")
       .single();
     if (error) throw error;
     return data;
   }
-  // /api/start çağrılmadan direkt submit edilmiş (örn. eski client)
   const { data, error } = await supabase
     .from(TABLE)
     .insert({
       ad,
       soyad,
-      tc_hash: tcHash,
-      tc_masked: tcMasked,
+      email,
       answers,
       started_at: completedAt,
       completed_at: completedAt
@@ -122,7 +116,7 @@ async function deleteResponse(id) {
 
 module.exports = {
   supabase,
-  findByTCHash,
+  findByEmail,
   startAttempt,
   completeResponse,
   listResponses,

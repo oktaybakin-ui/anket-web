@@ -10,8 +10,8 @@ const path = require("path");
 const ExcelJS = require("exceljs");
 
 const db = require("./db");
-const questions = require("./questions");
-const { validateTC, hashTC, maskTC } = require("./utils/tc");
+const { questions, isQuestionVisible } = require("./questions");
+const { validateEmail, normalizeEmail } = require("./utils/contact");
 const { sendMail, escapeHtml } = require("./utils/mail");
 
 const app = express();
@@ -111,7 +111,7 @@ const adminApiLimiter = rateLimit({
 });
 
 // --- Mail ---
-async function sendCompletionEmail({ ad, soyad, tcMasked, id }) {
+async function sendCompletionEmail({ ad, soyad, email, id }) {
   const to = process.env.MAIL_TO;
   if (!to) return; // alıcı tanımlı değil
   const when = new Date().toLocaleString("tr-TR", { timeZone: "Europe/Istanbul" });
@@ -125,7 +125,7 @@ async function sendCompletionEmail({ ad, soyad, tcMasked, id }) {
       <table cellpadding="8" style="border-collapse:collapse;width:100%;border:1px solid #e2e8f0;border-radius:8px">
         <tr><td style="border-bottom:1px solid #e2e8f0;color:#64748b">Kayıt No</td><td style="border-bottom:1px solid #e2e8f0"><strong>#${escapeHtml(id)}</strong></td></tr>
         <tr><td style="border-bottom:1px solid #e2e8f0;color:#64748b">Ad Soyad</td><td style="border-bottom:1px solid #e2e8f0">${escapeHtml(ad)} ${escapeHtml(soyad)}</td></tr>
-        <tr><td style="border-bottom:1px solid #e2e8f0;color:#64748b">TC (maskeli)</td><td style="border-bottom:1px solid #e2e8f0"><code>${escapeHtml(tcMasked || "—")}</code></td></tr>
+        <tr><td style="border-bottom:1px solid #e2e8f0;color:#64748b">E-posta</td><td style="border-bottom:1px solid #e2e8f0"><a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></td></tr>
         <tr><td style="color:#64748b">Tarih</td><td>${escapeHtml(when)}</td></tr>
       </table>
       ${
@@ -138,7 +138,7 @@ async function sendCompletionEmail({ ad, soyad, tcMasked, id }) {
   const text = `Yeni anket tamamlandı.
 Kayıt No: ${id}
 Ad Soyad: ${ad} ${soyad}
-TC (maskeli): ${tcMasked || "—"}
+E-posta: ${email}
 Tarih: ${when}`;
   return sendMail({
     to,
@@ -169,25 +169,20 @@ app.get("/api/questions", (req, res) => {
 });
 
 function parseIdentity(body) {
-  const { ad, soyad, tc } = body || {};
-  if (!ad || !soyad || !tc) {
-    return { error: "Ad, soyad ve TC zorunludur." };
+  const { ad, soyad, email } = body || {};
+  if (!ad || !soyad || !email) {
+    return { error: "Ad, soyad ve e-posta zorunludur." };
   }
   const adClean = String(ad).trim().slice(0, 60);
   const soyadClean = String(soyad).trim().slice(0, 60);
-  const tcClean = String(tc).trim();
+  const emailClean = normalizeEmail(email);
   if (adClean.length < 2 || soyadClean.length < 2) {
     return { error: "Ad ve soyad en az 2 karakter olmalıdır." };
   }
-  if (!validateTC(tcClean)) {
-    return { error: "Geçersiz TC Kimlik No." };
+  if (!validateEmail(emailClean)) {
+    return { error: "Geçersiz e-posta adresi." };
   }
-  return {
-    adClean,
-    soyadClean,
-    tcHash: hashTC(tcClean),
-    tcMasked: maskTC(tcClean)
-  };
+  return { adClean, soyadClean, email: emailClean };
 }
 
 // Kullanıcı kimlik formunu gönderdiğinde (yarım kalanları yakalamak için)
@@ -196,16 +191,15 @@ app.post("/api/start", startLimiter, ensureCsrfCookie, requireCsrf, async (req, 
     const parsed = parseIdentity(req.body);
     if (parsed.error) return res.status(400).json({ error: parsed.error });
 
-    const existing = await db.findByTCHash(parsed.tcHash);
+    const existing = await db.findByEmail(parsed.email);
     if (existing && existing.completed_at) {
-      return res.status(409).json({ error: "Bu TC ile daha önce anket doldurulmuş." });
+      return res.status(409).json({ error: "Bu e-posta ile daha önce anket doldurulmuş." });
     }
 
     await db.startAttempt({
       ad: parsed.adClean,
       soyad: parsed.soyadClean,
-      tcHash: parsed.tcHash,
-      tcMasked: parsed.tcMasked
+      email: parsed.email
     });
     res.json({ ok: true });
   } catch (err) {
@@ -225,6 +219,9 @@ app.post("/api/submit", submitLimiter, ensureCsrfCookie, requireCsrf, async (req
         : {};
     const normalized = {};
     for (const q of questions) {
+      // Dallanma: koşullu soru görünmüyorsa atla (zorunlu olsa bile)
+      if (!isQuestionVisible(q, answersObj)) continue;
+
       let v = answersObj[q.id];
       if (q.hasOther) {
         const otherText = answersObj[q.id + "__other"];
@@ -236,12 +233,20 @@ app.post("/api/submit", submitLimiter, ensureCsrfCookie, requireCsrf, async (req
           v = `Diğer: ${String(otherText).trim().slice(0, 500)}`;
         }
       }
+      // Grid sorusu: cevap satır → seçilen kolon eşlemesi olmalı
+      if (q.type === "grid" && v && typeof v === "object" && !Array.isArray(v)) {
+        // OK, satır:cevap dict
+      }
       if (q.required) {
         const empty =
           v === undefined ||
           v === null ||
           (typeof v === "string" && !v.trim()) ||
-          (Array.isArray(v) && v.length === 0);
+          (Array.isArray(v) && v.length === 0) ||
+          (q.type === "grid" &&
+            v &&
+            typeof v === "object" &&
+            (q.rows || []).some((row) => !v[row]));
         if (empty) {
           return res.status(400).json({ error: `"${q.text}" sorusu zorunludur.` });
         }
@@ -254,8 +259,7 @@ app.post("/api/submit", submitLimiter, ensureCsrfCookie, requireCsrf, async (req
       inserted = await db.completeResponse({
         ad: parsed.adClean,
         soyad: parsed.soyadClean,
-        tcHash: parsed.tcHash,
-        tcMasked: parsed.tcMasked,
+        email: parsed.email,
         answers: normalized
       });
     } catch (err) {
@@ -269,7 +273,7 @@ app.post("/api/submit", submitLimiter, ensureCsrfCookie, requireCsrf, async (req
     sendCompletionEmail({
       ad: parsed.adClean,
       soyad: parsed.soyadClean,
-      tcMasked: parsed.tcMasked,
+      email: parsed.email,
       id: inserted.id
     }).catch((e) => console.error("[mail]", e && e.message ? e.message : e));
 
@@ -377,6 +381,9 @@ app.delete("/admin/api/responses/:id", requireAdmin, requireCsrf, async (req, re
 function formatAnswerForExcel(q, value) {
   if (value === undefined || value === null) return "";
   if (Array.isArray(value)) return value.join(", ");
+  if (q && q.type === "grid" && typeof value === "object") {
+    return (q.rows || []).map((row) => `${row}: ${value[row] || "—"}`).join("\n");
+  }
   return String(value);
 }
 
@@ -392,7 +399,7 @@ async function buildWorkbook(rows) {
     { header: "Durum", key: "durum", width: 14 },
     { header: "Ad", key: "ad", width: 18 },
     { header: "Soyad", key: "soyad", width: 18 },
-    { header: "TC (maskeli)", key: "tc_masked", width: 16 },
+    { header: "E-posta", key: "email", width: 28 },
     { header: "Başlangıç", key: "started_at", width: 20 },
     { header: "Tamamlanma", key: "completed_at", width: 20 }
   ];
@@ -411,7 +418,7 @@ async function buildWorkbook(rows) {
       durum: r.completed_at ? "Tamamlandı" : "Yarım Kaldı",
       ad: r.ad,
       soyad: r.soyad,
-      tc_masked: r.tc_masked,
+      email: r.email,
       started_at: r.started_at,
       completed_at: r.completed_at || ""
     };
@@ -441,7 +448,7 @@ function buildIndividualWorkbook(r) {
   ws.addRow({ alan: "Durum", deger: r.completed_at ? "Tamamlandı" : "Yarım Kaldı" });
   ws.addRow({ alan: "Ad", deger: r.ad });
   ws.addRow({ alan: "Soyad", deger: r.soyad });
-  ws.addRow({ alan: "TC (maskeli)", deger: r.tc_masked });
+  ws.addRow({ alan: "E-posta", deger: r.email });
   ws.addRow({ alan: "Başlangıç", deger: r.started_at });
   ws.addRow({ alan: "Tamamlanma", deger: r.completed_at || "—" });
   ws.addRow({});

@@ -65,7 +65,7 @@ function applyFilters() {
       (r) =>
         r.ad.toLowerCase().includes(q) ||
         r.soyad.toLowerCase().includes(q) ||
-        (r.tc_masked || "").includes(q)
+        (r.email || "").includes(q)
     );
   }
   renderTable(rows);
@@ -95,7 +95,7 @@ function renderTable(rows) {
       <td>${badge}</td>
       <td>${escapeHtml(r.ad)}</td>
       <td>${escapeHtml(r.soyad)}</td>
-      <td><code>${escapeHtml(r.tc_masked || "—")}</code></td>
+      <td><code>${escapeHtml(r.email || "—")}</code></td>
       <td>${fmtDate(r.started_at)}</td>
       <td>${completed ? fmtDate(r.completed_at) : "—"}</td>
       <td>
@@ -147,7 +147,7 @@ function showDetailModal(r) {
     <div class="modal" role="dialog" aria-modal="true">
       <h2>${escapeHtml(r.ad)} ${escapeHtml(r.soyad)} ${status}</h2>
       <p style="color:var(--muted);margin-top:-2px">
-        TC: <code>${escapeHtml(r.tc_masked || "—")}</code><br>
+        E-posta: <code>${escapeHtml(r.email || "—")}</code><br>
         Başlangıç: ${fmtDate(r.started_at)}${completed ? ` · Tamamlanma: ${fmtDate(r.completed_at)}` : ""}
       </p>
     </div>

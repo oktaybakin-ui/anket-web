@@ -119,15 +119,13 @@
               <input type="text" name="soyad" required minlength="2" autocomplete="family-name" />
             </label>
             <label>
-              TC Kimlik No <span class="req">*</span>
+              E-posta <span class="req">*</span>
               <input
-                type="text"
-                name="tc"
+                type="email"
+                name="email"
                 required
-                inputmode="numeric"
-                maxlength="11"
-                pattern="\d{11}"
-                autocomplete="off"
+                autocomplete="email"
+                placeholder="ornek@kurum.com"
               />
             </label>
           </div>
@@ -138,37 +136,75 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
               </div>
               <div>
-                <div class="info-box-eyebrow">Araştırma Daveti</div>
+                <div class="info-box-eyebrow">Bilgilendirme ve Katılım Metni</div>
                 <div class="info-box-title">Sayın meslektaşım,</div>
               </div>
             </div>
             <p>
-              İkincil ışınlamalar ile ilgili <strong>uluslararası bir protokol</strong> oluşturmak
-              üzere medikal fizikçiler ve radyasyon onkologları ile ortak bir çalışma yapmak için
-              buluştuk.
+              Ülkemizde <strong>re-RT (yeniden ışınlama)</strong> uygulamalarına yönelik klinik
+              yaklaşımları değerlendirmek ve ulusal düzeyde standardizasyon çalışmalarına temel
+              oluşturmak amacıyla, medikal fizik uzmanları ve radyasyon onkologlarının iş birliği
+              ile hazırlanan bu anketi bilgilerinize sunuyoruz.
             </p>
             <p>
-              Sizinle paylaştığımız bu anket, <strong>klinikler arasındaki mevcut durumu
-              anlamak</strong>, farklılıkları tespit etmek ve mümkün olan ölçüde ortak bir
-              yaklaşım geliştirmek amacı ile hazırlanmıştır. Her merkezin klinik pratiğinin
-              farklı olduğunun, alınan kararların; doktor ve fizikçinin klinik tecrübesi,
-              hastanın genel durumu, kliniğin teknik olanakları gibi değişkenlere bağlı
-              olduğunun farkındayız. Bu farklılıkların çalışmanın doğal bir parçası olduğunu
-              kabul etmekteyiz. Amacımız, klinikler arasındaki farklılıklardan yararlanarak bilgi
-              paylaşımını artırmak ve <strong>standardizasyonu güçlendirmektir</strong>.
+              Bu çalışmanın amacı; Türkiye'de farklı kliniklerde uygulanan re-RT yaklaşımları
+              arasındaki <strong>benzerlik ve farklılıkları sistematik olarak ortaya koymak</strong>
+              ve mümkün olan ölçüde ortak bir yaklaşım geliştirilmesine katkı sağlamaktır.
+              Re-RT uygulamalarının; klinik deneyim, hastaya özgü faktörler ve kurumların
+              teknik altyapısı gibi birçok değişkene bağlı olarak farklılık gösterebileceğinin
+              farkındayız. Bu çeşitlilik, çalışmanın doğal ve değerli bir bileşeni olarak kabul
+              edilmektedir.
+            </p>
+            <p>
+              Anket, Türkiye'de aktif olarak görev yapan Medikal Fizik Uzmanları ve Radyasyon
+              Onkologları için hazırlanmıştır ve tamamlanması <strong>yaklaşık 15 dakika</strong>
+              sürmektedir.
             </p>
             <blockquote class="info-highlight">
-              Bu nedenle, anketi yanıtlarken kendi kliniğinizdeki <strong>gerçek uygulamaları
-              mümkün olduğunca doğru ve dürüst bir şekilde</strong> yansıtmanız büyük önem
-              taşımaktadır. Verdiğiniz her yanıt, oluşturulacak önerilerin güvenilirliği
-              açısından doğrudan belirleyici olacaktır.
+              Anketi yanıtlarken, kendi kurumunuzdaki <strong>gerçek uygulamaları mümkün
+              olduğunca doğru ve objektif şekilde</strong> yansıtmanız büyük önem taşımaktadır.
+              Sağlayacağınız veriler, geliştirilecek önerilerin bilimsel geçerliliği ve
+              güvenilirliği açısından doğrudan belirleyici olacaktır.
             </blockquote>
-            <p class="info-thanks">Katkılarınız için teşekkür ederiz.</p>
+            <div class="kvkk-section">
+              <div class="kvkk-section-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Gizlilik ve KVKK
+              </div>
+              <p>
+                <strong>Katılım gönüllülük esasına dayanmaktadır.</strong> Katılımcılar anketi
+                diledikleri aşamada sonlandırabilirler. Ankete devam edilmesi, çalışma hakkında
+                bilgilendirildiğiniz ve katılımı kabul ettiğiniz anlamına gelmektedir.
+              </p>
+              <p>
+                Toplanan tüm veriler <strong>gizli tutulacak</strong>; bireysel yanıtlar
+                raporlanmayacak ve yalnızca toplu (anonim) düzeyde analiz edilecektir. Veriler
+                üçüncü taraflarla paylaşılmayacaktır. Tüm veri işleme süreçleri,
+                <strong>Kişisel Verilerin Korunması Kanunu (KVKK)</strong> hükümlerine uygun
+                olarak yürütülecektir.
+              </p>
+              <p>
+                Elde edilen sonuçların katılımcılarla paylaşılması ve ilerleyen süreçte ulusal
+                kılavuzların, raporlama standartlarının ve kayıt sistemlerinin geliştirilmesine
+                katkı sağlaması hedeflenmektedir.
+              </p>
+            </div>
+            <div class="consent-box">
+              <div class="consent-title">Onam Beyanı</div>
+              <label class="consent-line">
+                <input type="checkbox" id="consent1" name="consent1" />
+                <span>Yukarıdaki bilgileri okudum ve anladım.</span>
+              </label>
+              <label class="consent-line">
+                <input type="checkbox" id="consent2" name="consent2" />
+                <span>Çalışmaya gönüllü olarak katılmayı kabul ediyorum.</span>
+              </label>
+            </div>
           </div>
 
           <p class="kvkk-note">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-            <span>"Ankete Başla"ya bastığınız andan itibaren bilgileriniz kaydedilmeye başlar. TC Kimlik No güvenli bir şekilde hash'lenerek saklanır, açık metin olarak hiçbir yerde tutulmaz.</span>
+            <span>"Ankete Başla"ya bastığınız andan itibaren bilgileriniz kaydedilmeye başlar. Aynı e-posta ile yalnızca bir kez anket doldurulabilir.</span>
           </p>
           <div id="identityMessage" class="message" role="alert" aria-live="polite"></div>
           <div class="form-actions">
