@@ -76,9 +76,9 @@ function renderQuestion(q) {
     const tbody = el("tbody");
     (q.rows || []).forEach((row) => {
       const tr = el("tr");
-      tr.appendChild(el("th", { class: "grid-row-label" }, row));
+      tr.appendChild(el("th", { class: "grid-row-label", scope: "row" }, row));
       (q.columns || []).forEach((col) => {
-        const td = el("td");
+        const td = el("td", { "data-col": col });
         const inp = el("input", {
           type: "radio",
           name: `${q.id}::${row}`,
