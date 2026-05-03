@@ -584,12 +584,12 @@ main { position: relative; z-index: 1; }
   .grid-table tbody tr {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    grid-column-gap: 6px;
+    grid-column-gap: 4px;
     grid-row-gap: 0;
     background: transparent;
     border: none;
     padding: 0;
-    margin: 0 0 18px;
+    margin: 0 0 14px;
   }
   .grid-table tbody tr:last-child { margin-bottom: 0; }
   .grid-table tbody tr:nth-child(even) td,
@@ -601,14 +601,14 @@ main { position: relative; z-index: 1; }
   .grid-table .grid-row-label {
     grid-column: 1 / -1;
     display: block;
-    padding: 0 0 10px;
+    padding: 0 0 6px;
     border: none;
-    margin: 0 0 8px;
+    margin: 0 0 6px;
     max-width: none;
-    font-size: 14.5px;
+    font-size: 13.5px;
     font-weight: 600;
     color: var(--text);
-    line-height: 1.45;
+    line-height: 1.4;
     background: transparent;
     text-align: left;
     text-transform: none;
@@ -631,18 +631,18 @@ main { position: relative; z-index: 1; }
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 4px;
+    gap: 2px;
     width: 100%;
-    padding: 8px 4px;
+    padding: 5px 2px;
     border: 1.5px solid var(--border-strong);
-    border-radius: 10px;
+    border-radius: 8px;
     background: #fff;
     cursor: pointer;
     font-weight: 600;
     color: var(--text-2);
     transition: all 0.15s ease;
     box-sizing: border-box;
-    min-height: 56px;
+    min-height: 42px;
   }
   .grid-table .grid-cell:hover {
     border-color: var(--primary);
@@ -652,19 +652,19 @@ main { position: relative; z-index: 1; }
     border-color: var(--primary);
     background: var(--primary-50);
     color: var(--primary-700);
-    box-shadow: 0 0 0 3px rgba(11, 110, 153, 0.12);
+    box-shadow: 0 0 0 2px rgba(11, 110, 153, 0.12);
   }
   .grid-table .grid-cell-num {
     display: block;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 700;
     line-height: 1;
   }
   .grid-table input[type="radio"] {
     appearance: none;
     -webkit-appearance: none;
-    width: 18px;
-    height: 18px;
+    width: 14px;
+    height: 14px;
     margin: 0;
     border: 2px solid #cbd5e1;
     border-radius: 50%;
@@ -681,7 +681,7 @@ main { position: relative; z-index: 1; }
   .grid-table input[type="radio"]:checked::after {
     content: "";
     position: absolute;
-    inset: 3px;
+    inset: 2px;
     border-radius: 50%;
     background: #fff;
   }
