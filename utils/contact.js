@@ -1,4 +1,5 @@
 const dns = require("dns").promises;
+const crypto = require("crypto");
 
 // Basit ama güvenli RFC 5322 e-posta doğrulaması
 const EMAIL_RE = /^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$/i;
@@ -12,6 +13,14 @@ function validateEmail(value) {
 
 function normalizeEmail(value) {
   return String(value || "").trim().toLowerCase();
+}
+
+// E-posta için deterministik hash — uniqueness lookup için.
+// EMAIL_HASH_SALT veya JWT_SECRET salt olarak kullanılır (sızıntıda rainbow table direnci).
+function hashEmail(email) {
+  const salt = process.env.EMAIL_HASH_SALT || process.env.JWT_SECRET || "";
+  const normalized = normalizeEmail(email);
+  return crypto.createHash("sha256").update(salt + ":" + normalized).digest("hex");
 }
 
 // Domain MX doğrulama cache (TTL 30 dk) — aynı domain'i defalarca DNS sorgulamamak için
@@ -87,4 +96,4 @@ async function hasValidEmailDomain(email) {
   return true;
 }
 
-module.exports = { validateEmail, normalizeEmail, hasValidEmailDomain };
+module.exports = { validateEmail, normalizeEmail, hashEmail, hasValidEmailDomain };

@@ -77,7 +77,8 @@
       "Bash(node -e \"const {questions} = require\\('./questions'\\); const ids = new Set\\(questions.map\\(q=>q.id\\)\\); const broken = questions.filter\\(q=>q.showIf\\).flatMap\\(q=>{const c=q.showIf; const refs = c.allOf?c.allOf:[c]; return refs.filter\\(r=>!ids.has\\(r.id\\)\\).map\\(r=>q.id+' refs missing '+r.id\\);}\\); console.log\\('Broken refs:', broken.length, broken.slice\\(0,5\\)\\);\")",
       "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(any\\(q.get\\('showIf',{}\\).get\\('id'\\)=='s6' for q in d\\)\\)\")",
       "Bash(sed -i '' -e 's/re-RT \\(yeniden ışınlama\\)/yeniden ışınlama/g' -e 's/Re-RT/Yeniden ışınlama/g' -e 's/re-RT/yeniden ışınlama/g' public/index.html questions.js)",
-      "Bash(grep -c \"re-RT\\\\|Re-RT\" public/index.html questions.js)"
+      "Bash(grep -c \"re-RT\\\\|Re-RT\" public/index.html questions.js)",
+      "Bash(node -c utils/crypto.js)"
     ]
   }
 }

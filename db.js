@@ -1,4 +1,6 @@
 const { createClient } = require("@supabase/supabase-js");
+const { encrypt, decrypt } = require("./utils/crypto");
+const { hashEmail, normalizeEmail } = require("./utils/contact");
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
@@ -14,14 +16,30 @@ const supabase = createClient(SUPABASE_URL || "", SUPABASE_SERVICE_KEY || "", {
 });
 
 const TABLE = "responses";
+// Şifreli kolonlar + meta
 const SELECT_COLS =
-  "id, ad, soyad, email, answers, started_at, completed_at, created_at";
+  "id, ad_enc, soyad_enc, email_enc, email_hash, answers, started_at, completed_at, created_at";
+
+// DB'den dönen satırı uygulama formatına çözer (decrypt PII)
+function decryptRow(r) {
+  if (!r) return r;
+  return {
+    id: r.id,
+    ad: decrypt(r.ad_enc) || "",
+    soyad: decrypt(r.soyad_enc) || "",
+    email: decrypt(r.email_enc) || "",
+    answers: r.answers,
+    started_at: r.started_at,
+    completed_at: r.completed_at,
+    created_at: r.created_at
+  };
+}
 
 async function findByEmail(email) {
   const { data, error } = await supabase
     .from(TABLE)
     .select("id, completed_at")
-    .ilike("email", email)
+    .eq("email_hash", hashEmail(email))
     .maybeSingle();
   if (error) throw error;
   return data;
@@ -31,12 +49,14 @@ async function startAttempt({ ad, soyad, email }) {
   const existing = await findByEmail(email);
   if (existing) return existing;
 
+  const normEmail = normalizeEmail(email);
   const { data, error } = await supabase
     .from(TABLE)
     .insert({
-      ad,
-      soyad,
-      email,
+      ad_enc: encrypt(ad),
+      soyad_enc: encrypt(soyad),
+      email_enc: encrypt(normEmail),
+      email_hash: hashEmail(normEmail),
       answers: {},
       started_at: new Date().toISOString(),
       completed_at: null
@@ -55,10 +75,16 @@ async function completeResponse({ ad, soyad, email, answers }) {
     throw err;
   }
   const completedAt = new Date().toISOString();
+  const normEmail = normalizeEmail(email);
   if (existing) {
     const { data, error } = await supabase
       .from(TABLE)
-      .update({ ad, soyad, answers, completed_at: completedAt })
+      .update({
+        ad_enc: encrypt(ad),
+        soyad_enc: encrypt(soyad),
+        answers,
+        completed_at: completedAt
+      })
       .eq("id", existing.id)
       .select("id")
       .single();
@@ -68,9 +94,10 @@ async function completeResponse({ ad, soyad, email, answers }) {
   const { data, error } = await supabase
     .from(TABLE)
     .insert({
-      ad,
-      soyad,
-      email,
+      ad_enc: encrypt(ad),
+      soyad_enc: encrypt(soyad),
+      email_enc: encrypt(normEmail),
+      email_hash: hashEmail(normEmail),
       answers,
       started_at: completedAt,
       completed_at: completedAt
@@ -87,7 +114,7 @@ async function listResponses() {
     .select(SELECT_COLS)
     .order("started_at", { ascending: false });
   if (error) throw error;
-  return data || [];
+  return (data || []).map(decryptRow);
 }
 
 async function listResponsesAsc() {
@@ -96,7 +123,7 @@ async function listResponsesAsc() {
     .select(SELECT_COLS)
     .order("id", { ascending: true });
   if (error) throw error;
-  return data || [];
+  return (data || []).map(decryptRow);
 }
 
 async function getResponse(id) {
@@ -106,7 +133,7 @@ async function getResponse(id) {
     .eq("id", id)
     .maybeSingle();
   if (error) throw error;
-  return data;
+  return decryptRow(data);
 }
 
 async function deleteResponse(id) {
